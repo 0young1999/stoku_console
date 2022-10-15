@@ -143,8 +143,9 @@ namespace 스토쿠_콘솔
 		public void nakedPair(long count, int[,] state, bool[,,] hint, bool targetDir, int lineNum, int[] targetNum)
 		{
 			Console.Write(count + "번째 드러난 둘 ");
-			if (targetDir) Console.Write("좌우 " + targetNum[0] + ", " + targetNum[1]);
-			else Console.Write("상하 " + targetNum[0] + ", " + targetNum[1]);
+			if (targetDir) Console.Write("좌우 ");
+			else Console.Write("상하 ");
+			Console.WriteLine((targetNum[0] + 1) + ", " + (targetNum[1] + 1) + "\n");
 			for (int i = 0; i < 3; i++)
 			{
 				for (int j = 0; j < 9; j++)
@@ -153,17 +154,13 @@ namespace 스토쿠_콘솔
 					{
 						for (int b = 0; b < 9; b++)
 						{
-							Console.Write(" ");
-							if ((targetNum[0] == (i * 3) + a && targetNum[1] == (i * 3) + a) && ((targetDir && (i * 3) + j == lineNum) || (!targetDir && (a * 3) + b == lineNum)))
-							{
+							Console.Write(" "); 
+							if ((targetNum[0] == (i * 3) + a || targetNum[1] == (i * 3) + a) && ((!targetDir && b == lineNum) || (targetDir && j == lineNum)))
 								Console.ForegroundColor = ConsoleColor.Red;
-							}
 							if (hint[(i * 3) + a, j, b]) Console.Write("1");
 							else Console.Write("0");
-							if ((targetNum[0] == (i * 3) + a && targetNum[1] == (i * 3) + a) && ((targetDir && (i * 3) + j == lineNum) || (!targetDir && (a * 3) + b == lineNum)))
-							{
+							if ((targetNum[0] == (i * 3) + a || targetNum[1] == (i * 3) + a) && ((!targetDir && b == lineNum) || (targetDir && j == lineNum)))
 								Console.ForegroundColor = ConsoleColor.White;
-							}
 						}
 						Console.Write(" |");
 					}
@@ -243,6 +240,9 @@ namespace 스토쿠_콘솔
 				}
 				Console.WriteLine();
 			}
+
+			writeDefult(state);
+			Console.WriteLine();
 		}
 	}
 }

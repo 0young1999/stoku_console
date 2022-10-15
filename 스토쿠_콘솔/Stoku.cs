@@ -296,11 +296,77 @@ namespace 스토쿠_콘솔
 					if (hintCount[i1, i2] == 2) x++;
 					if (hintCount[i2, i1] == 2) y++;
 				}
-				if(x > 2)   // x
+				if (y > 1)   // y
 				{
 					for (int j1 = 0; j1 < 8; j1++)
 					{
-						if (hintCount[i1,j1] == 2)
+						if (hintCount[j1, i1] == 2)
+						{
+							int[] temp1 = new int[2];
+							int temp1Count = 0;
+							for (int a1 = 0; a1 < 9; a1++)
+							{
+								if (hint[a1, j1, i1])
+								{
+									temp1[temp1Count] = a1;
+									temp1Count++;
+								}
+							}
+							for(int j2 = j1 + 1; j2 < 9; j2++)
+							{
+								if (hintCount[j2, i1] == 2)
+								{
+									int[] temp2 = new int[2];
+									int temp2Count = 0;
+									for (int a1 = 0; a1 < 9; a1++)
+									{
+										if (hint[a1, j2, i1])
+										{
+											temp2[temp2Count] = a1;
+											temp2Count++;
+										}
+									}
+									if(temp1[0] == temp2[0] && temp1[1] == temp2[1])
+									{
+										// 실행 여부 확인
+										int stanby = 0;
+
+										for(int b1 = 0; b1 < 9; b1++)
+										{
+											if (hint[temp1[0], b1, i1]) stanby++;
+											if (hint[temp1[1], b1, i1]) stanby++;
+										}
+
+										if(stanby > 4)
+										{
+											print.nakedPair(count, gameBase, hint, false, i1, temp1);
+											for (int a1 = 0; a1 < 9; a1++)
+											{
+												if (a1 != j1 && a1 != j2)
+												{
+													if (hint[temp1[0], a1, i1])
+													{
+														hint[temp1[0], a1, i1] = false;
+													}
+													if (hint[temp1[1], a1, i1])
+													{
+														hint[temp1[1], a1, i1] = false;
+													}
+												}
+											}
+											return true;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if (x > 1)   // x
+				{
+					for (int j1 = 0; j1 < 8; j1++)
+					{
+						if (hintCount[i1, j1] == 2)
 						{
 							int[] temp1 = new int[2];
 							int temp1Count = 0;
@@ -312,7 +378,7 @@ namespace 스토쿠_콘솔
 									temp1Count++;
 								}
 							}
-							for(int j2 = j1 + 1; j2 < 9; j2++)
+							for (int j2 = j1 + 1; j2 < 9; j2++)
 							{
 								if (hintCount[i1, j2] == 2)
 								{
@@ -320,37 +386,48 @@ namespace 스토쿠_콘솔
 									int temp2Count = 0;
 									for (int a1 = 0; a1 < 9; a1++)
 									{
-										if(hint[a1, i1, j2])
+										if (hint[a1, i1, j2])
 										{
 											temp2[temp2Count] = a1;
 											temp2Count++;
 										}
 									}
-									if(temp1[0] == temp2[0] && temp1[1] == temp2[1])    // x 특정
+									if (temp1[0] == temp2[0] && temp1[1] == temp2[1])
 									{
-										print.nakedPair(count, gameBase, hint, true, i1, temp1);
-										for(int a1 = 0; a1 < 9; a1++)
+										// 실행 여부 확인
+										int stanby = 0;
+
+										for (int b1 = 0; b1 < 9; b1++)
 										{
-											if(a1 != j1 && a1 != j2)
+											if (hint[temp1[0], i1, b1]) stanby++;
+											if (hint[temp1[1], i1, b1]) stanby++;
+										}
+
+										if (stanby > 4)
+										{
+											print.nakedPair(count, gameBase, hint, true, i1, temp1);
+											for (int a1 = 0; a1 < 9; a1++)
 											{
-												if(hint[temp1[0], i1, a1])
+												if (a1 != j1 && a1 != j2)
 												{
-													hint[temp1[0], i1, a1] = false;
-												}
-												if(hint[temp1[1], i1, a1])
-												{
-													hint[temp1[1], i1, a1] = false;
+													if (hint[temp1[0], i1, a1])
+													{
+														hint[temp1[0], i1, a1] = false;
+													}
+													if (hint[temp1[1], i1, a1])
+													{
+														hint[temp1[1], i1, a1] = false;
+													}
 												}
 											}
+											return true;
 										}
-										return true;
 									}
 								}
 							}
 						}
 					}
 				}
-				// y
 			}
 
 			// box
