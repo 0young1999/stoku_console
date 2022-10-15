@@ -51,6 +51,7 @@ namespace 스토쿠_콘솔
 				if (stoku.intersetingPointing(count)) continue;
 
 				// Intersetion(Claiming) 교차로(클레이밍)
+				if (stoku.intersetionClaiming(count)) continue;
 
 				// Naked Pair 드라난 둘
 				if (stoku.nakedPair(count)) continue;

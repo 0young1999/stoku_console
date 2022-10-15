@@ -173,6 +173,44 @@ namespace 스토쿠_콘솔
 			Console.WriteLine();
 		}
 
+		// Intersetion(Claiming) 교차로(클레이밍)
+		public void intersetionClaiming(long count, int[,] state, bool[,,] hint, int targetNum, int line, bool targetDir)
+		{
+			Console.WriteLine(count + "번째 교차로(클레이밍)\n");
+			for (int i = 0; i < 3; i++)
+			{
+				for (int j = 0; j < 9; j++)
+				{
+					for (int a = 0; a < 3; a++)
+					{
+						for (int b = 0; b < 9; b++)
+						{
+							Console.Write(" ");
+							if (hint[(i * 3) + a, j, b])
+							{
+								if ((i * 3) + a == targetNum)
+								{
+									if((targetDir && j == line) || (!targetDir && b == line))
+									{
+										Console.ForegroundColor = ConsoleColor.Red;
+									}
+								}
+								Console.Write("1");
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+							else Console.Write("0");
+						}
+						Console.Write(" |");
+					}
+					Console.WriteLine();
+				}
+				Console.WriteLine();
+			}
+
+			writeDefult(state);
+			Console.WriteLine();
+		}
+
 		// 힌트 크게 보기
 		public void bigHint(int [,] state, bool[,,] hint)
 		{

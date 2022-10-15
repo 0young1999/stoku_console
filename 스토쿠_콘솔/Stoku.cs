@@ -283,6 +283,105 @@ namespace 스토쿠_콘솔
 			return false;
 		}
 
+		// Intersetion(Claiming) 교차로(클레이밍)
+		public bool intersetionClaiming(long count)
+		{
+			for(int num = 0; num < 9; num++)	// 숫자
+			{
+				for(int x1 = 0; x1 < 9; x1++)
+				{
+					int checkX = -1;
+					int checkY = -1;
+					for(int y1 = 0; y1 < 3; y1++)
+					{
+						for(int y2 = 0; y2 < 3; y2++)
+						{
+							if(hint[num, x1, (y1 * 3) + y2])
+							{
+								if(checkX == -1)
+								{
+									checkX = y1;
+								} else if(checkX != y1)
+								{
+									checkX = -2;
+								}
+							}
+							if(hint[num, (y1 * 3) + y2, x1])
+							{
+								if(checkY == -1)
+								{
+									checkY = y1;
+								} else if(checkY != y1)
+								{
+									checkY = -2;
+								}
+							}
+						}
+					}
+					if(checkX > -1)
+					{
+						bool temp = false;
+						for(int i = (x1 / 3) * 3; i < ((x1 / 3) * 3) + 3; i++)
+						{
+							if(i != x1)
+							{
+								for (int hy = checkX * 3; hy < (checkX * 3) + 3; hy++)
+								{
+									if (hint[num, i, hy]) temp = true;
+								}
+							}
+						}
+						if(temp)
+						{
+							print.intersetionClaiming(count, gameBase, hint, num, x1, true);
+							for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
+							{
+								for (int hy = checkX * 3; hy < (checkX * 3) + 3; hy++)
+								{
+									if (hx != x1)
+									{
+										hint[num, hx, hy] = false;
+									}
+								}
+							}
+							return true;
+						}
+					}
+					if (checkY > -1)
+					{
+						bool temp = false;
+						for (int i = (x1 / 3) * 3; i < ((x1 / 3) * 3) + 3; i++)
+						{
+							if (i != x1)
+							{
+								for (int hy = checkY * 3; hy < (checkY * 3) + 3; hy++)
+								{
+									if (hint[num, hy, i]) temp = true;
+								}
+							}
+						}
+						if(temp)
+						{
+							print.intersetionClaiming(count, gameBase, hint, num, x1, false);
+							for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
+							{
+								for (int hy = checkY * 3; hy < (checkY * 3) + 3; hy++)
+								{
+									if (hx != x1)
+									{
+										hint[num, hy, hx] = false;
+									}
+								}
+							}
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
 		// Naked Pair 드러난 둘
 		public bool nakedPair(long count)
 		{
