@@ -21,123 +21,6 @@ namespace 스토쿠_콘솔
 			Console.ReadKey();
 			Console.WriteLine();
 		}
-		public void writeDefult(int[,] state, int[] target)
-		{
-			for (int i = 0; i < 9; i++)
-			{
-				for (int j = 0; j < 9; j++)
-				{
-					if (target[0] == i && target[1] == j) Console.ForegroundColor = ConsoleColor.Red;
-					Console.Write(" " + state[i, j]);
-					if (target[0] == i && target[1] == j) Console.ForegroundColor = ConsoleColor.White;
-				}
-				Console.WriteLine();
-			}
-			Console.ReadKey();
-			Console.WriteLine();
-		}
-
-		// 힌트 포함 모두 출력
-		public void writeTotalDefult(int[,] state, bool[,,] hint)
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				for (int j = 0; j < 9; j++)
-				{
-					for (int a = 0; a < 3; a++)
-					{
-						for (int b = 0; b < 9; b++)
-						{
-							Console.Write(" ");
-							if (hint[(i * 3) + a, j, b]) Console.Write("1");
-							else Console.Write("0");
-						}
-						Console.Write(" |");
-					}
-					Console.WriteLine();
-				}
-				Console.WriteLine();
-			}
-
-			writeDefult(state);
-			Console.WriteLine();
-		}
-		public void writeTotalDefult(int[,] state, bool[,,] hint, int[] target)
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				for (int j = 0; j < 9; j++)
-				{
-					for (int a = 0; a < 3; a++)
-					{
-						for (int b = 0; b < 9; b++)
-						{
-							Console.Write(" ");
-							if(target[0] == j && target[1] == b) Console.ForegroundColor = ConsoleColor.Red;
-							if (hint[(i * 3) + a, j, b]) Console.Write("1");
-							else Console.Write("0");
-							if (target[0] == j && target[1] == b) Console.ForegroundColor = ConsoleColor.White;
-						}
-						Console.Write(" |");
-					}
-					Console.WriteLine();
-				}
-				Console.WriteLine();
-			}
-
-			writeDefult(state, target);
-			Console.WriteLine();
-		}
-
-		// 힌트 포함 카운트 내용 출력
-		public void writeTotalDefult(long count, string content, int[,] state, bool[,,] hint)
-		{
-			Console.WriteLine(count + content + "\n");
-			writeTotalDefult(state, hint);
-		}
-
-		// 힌트 포함 타겟팅 내용 출력
-		public void writeTargetTotal(long count, string content, int[,] state, bool[,,] hint, int[] location)
-		{
-			Console.WriteLine(count + "번째 " + content + " target : " + location[0] + "," + location[1] + "\n");
-			writeTotalDefult(state, hint, location);
-		}
-
-		// Intersetion(pointing) 교차로(포인팅)
-		public void intersetionPointing(long count, int[,] state, bool[,,] hint, int targetNum, bool targetDir, int targetLineNum)
-		{
-			Console.WriteLine(count + "번째 교차로(포인팅)\n");
-			for (int i = 0; i < 3; i++)
-			{
-				for (int j = 0; j < 9; j++)
-				{
-					for (int a = 0; a < 3; a++)
-					{
-						for (int b = 0; b < 9; b++)
-						{
-							//if (target) Console.ForegroundColor = ConsoleColor.Red;
-							if(targetNum == (i * 3) + a && ((targetDir && targetLineNum == j) || (!targetDir && targetLineNum == b)))
-							{
-								Console.ForegroundColor = ConsoleColor.Red;
-							}
-							Console.Write(" ");
-							if (hint[(i * 3) + a, j, b]) Console.Write("1");
-							else Console.Write("0");
-							if (targetNum == (i * 3) + a && ((targetDir && targetLineNum == j) || (!targetDir && targetLineNum == b)))
-							{
-								Console.ForegroundColor = ConsoleColor.White;
-							}
-						}
-						Console.Write(" |");
-					}
-					Console.WriteLine();
-				}
-				Console.WriteLine();
-			}
-
-			writeDefult(state);
-			Console.WriteLine();
-		}
 
 		// nakedPair
 		public void nakedPair(long count, int[,] state, bool[,,] hint, bool targetDir, int lineNum, int[] targetNum)
@@ -211,19 +94,32 @@ namespace 스토쿠_콘솔
 			Console.WriteLine();
 		}
 
-		// 힌트 크게 보기
-		public void bigHint(int [,] state, bool[,,] hint)
+		// big hint
+		/*
+		 White	: 기본
+		 yellow	: 완성된 숫자
+		 red	: 삭제될 힌트
+		 blue	: 주목할 힌트
+		 green	: 선택된 숫자의 다른 셀의 힌트
+		 */
+		// 기본형
+		public void bigHintDefult(int [,] state, bool[,,] hint)
 		{
-			for(int i1 = 0; i1 < 9; i1++)
+			for(int i1 = 0; i1 < 9; i1++)	// X 셀
 			{
-				for(int i2 = 0; i2 < 3; i2++)
+				for(int i2 = 0; i2 < 3; i2++)	// X 힌트 셀
 				{
-					for(int j1 = 0; j1 < 9; j1++)
+					for(int j1 = 0; j1 < 9; j1++)	// Y 셀
 					{
-						for(int j2 = 0; j2 < 3; j2++)
+						for(int j2 = 0; j2 < 3; j2++)	// Y 힌트 셀
 						{
 							Console.Write(" ");
-							if (hint[i2 * 3 + j2, i1, j1])
+							if(state[i1, j1] != 0 && i2 == 1 && j2 == 1)
+							{
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.Write(state[i1, j1]);
+								Console.ForegroundColor = ConsoleColor.White;
+							} else if (hint[i2 * 3 + j2, i1, j1])
 							{
 								Console.Write(i2 * 3 + j2 + 1);
 							} else
@@ -278,9 +174,194 @@ namespace 스토쿠_콘솔
 				}
 				Console.WriteLine();
 			}
-
-			writeDefult(state);
+			Console.ReadKey();
 			Console.WriteLine();
 		}
+			// 타겟팅
+		public void bigHintTargeting(long count, string content, int[,] state, bool[,,] hint, int target, int[] location)
+		{
+			Console.WriteLine(count + "번째 " + content + " target : " + (target + 1) + "\n");
+			for (int i1 = 0; i1 < 9; i1++)  // X 셀
+			{
+				for (int i2 = 0; i2 < 3; i2++)  // X 힌트 셀
+				{
+					for (int j1 = 0; j1 < 9; j1++)  // Y 셀
+					{
+						for (int j2 = 0; j2 < 3; j2++)  // Y 힌트 셀
+						{
+							Console.Write(" ");
+							if (state[i1, j1] != 0 && i2 == 1 && j2 == 1)
+							{
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.Write(state[i1, j1]);
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+							else if (hint[i2 * 3 + j2, i1, j1])
+							{
+								if((i2 * 3 + j2 + 1) == (target + 1))
+								{
+									if(i1 == location[0] && j1 == location[1])
+									{
+										Console.ForegroundColor = ConsoleColor.Blue;
+									} else
+									{
+										Console.ForegroundColor = ConsoleColor.Green;
+									}
+								}
+								Console.Write(i2 * 3 + j2 + 1);
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+							else
+							{
+								Console.Write(" ");
+							}
+						}
+						if (j1 != 8)
+						{
+							if (j1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write(" |");
+							if (j1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+					}
+					Console.WriteLine();
+				}
+				for (int a = 0; a < 71; a++)
+				{
+					if (i1 != 8)
+					{
+						if (a % 8 == 7)
+						{
+							if (i1 % 3 == 2 || a % 24 == 23)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write("+");
+							if (i1 % 3 == 2 || a % 24 == 23)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+						else
+						{
+							if (i1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write("-");
+							if (i1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+					}
+				}
+				Console.WriteLine();
+			}
+			Console.ReadKey();
+			Console.WriteLine();
+		}
+		// Intersetion(pointing) 교차로(포인팅)
+		public void bigHintIntersetingPointing(long count, string content, int[,] state, bool[,,] hint, int target, int locationBox, int line, bool lineDir)
+		{
+			Console.WriteLine(count + "번째 " + content + " target : " + (target + 1) + "\n");
+			for (int i1 = 0; i1 < 9; i1++)  // X 셀
+			{
+				for (int i2 = 0; i2 < 3; i2++)  // X 힌트 셀
+				{
+					for (int j1 = 0; j1 < 9; j1++)  // Y 셀
+					{
+						for (int j2 = 0; j2 < 3; j2++)  // Y 힌트 셀
+						{
+							Console.Write(" ");
+							if (state[i1, j1] != 0 && i2 == 1 && j2 == 1)
+							{
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.Write(state[i1, j1]);
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+							else if (hint[i2 * 3 + j2, i1, j1])
+							{
+								if(target + 1 == (i2 * 3 + j2 + 1))
+								{
+									if ((lineDir && line == i1) || (!lineDir && line == j1))
+									{
+										if ((lineDir && locationBox == (j1 / 3)) || (!lineDir && locationBox == (i1 / 3)))
+										{
+											Console.ForegroundColor = ConsoleColor.Blue;
+										}
+										else
+										{
+											Console.ForegroundColor = ConsoleColor.Red;
+										}
+									} else
+									{
+										Console.ForegroundColor = ConsoleColor.Green;
+									}
+								}
+								Console.Write(i2 * 3 + j2 + 1);
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+							else
+							{
+								Console.Write(" ");
+							}
+						}
+						if (j1 != 8)
+						{
+							if (j1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write(" |");
+							if (j1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+					}
+					Console.WriteLine();
+				}
+				for (int a = 0; a < 71; a++)
+				{
+					if (i1 != 8)
+					{
+						if (a % 8 == 7)
+						{
+							if (i1 % 3 == 2 || a % 24 == 23)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write("+");
+							if (i1 % 3 == 2 || a % 24 == 23)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+						else
+						{
+							if (i1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write("-");
+							if (i1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+					}
+				}
+				Console.WriteLine();
+			}
+			Console.ReadKey();
+			Console.WriteLine();
+		}
+
 	}
 }

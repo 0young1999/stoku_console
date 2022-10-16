@@ -40,7 +40,7 @@ namespace 스토쿠_콘솔
 
 			for(int i = 0; i < 9; i++)
 			{
-				if(tempS[i].Split(' ').Length != 9)
+				if(tempS[i].Trim().Split(' ').Length != 9)
 				{
 					Console.WriteLine("text 파일 오류 숫자 부족 " + tempS[i].Split(' ').Length);
 					Console.WriteLine(tempS[i]);
@@ -51,7 +51,7 @@ namespace 스토쿠_콘솔
 
 			for(int i = 0; i < 9; i++)
 			{
-				string[] tempSS = tempS[i].Split(' ');
+				string[] tempSS = tempS[i].Trim().Split(' ');
 				for(int j = 0; j < 9; j++)
 				{
 					result[i, j] = int.Parse(tempSS[j]);

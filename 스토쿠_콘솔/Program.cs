@@ -10,6 +10,12 @@ namespace 스토쿠_콘솔
 	{
 		static void Main(string[] args)
 		{
+			// 콘솔 설정
+				// 콘솔 사이즈
+			Console.SetWindowSize(100, 39);
+				// 콘솔 색상
+			Console.ForegroundColor = ConsoleColor.White;
+			
 			// 설정 변수
 				// 파일명
 			string fileName = "test.txt";
@@ -20,12 +26,6 @@ namespace 스토쿠_콘솔
 				// 스토쿠
 			Stoku stoku = new Stoku(fileName);
 
-			// 콘솔 설정
-				// 콘솔 사이즈
-			Console.SetWindowSize(100, 42);
-				// 콘솔 색상
-			Console.ForegroundColor = ConsoleColor.White;
-
 			// 클래스 로드
 				// 화면 출력
 			ConsoleWrite print = new ConsoleWrite();
@@ -35,8 +35,6 @@ namespace 스토쿠_콘솔
 			{
 				// 힌트 초기화
 				stoku.hintScan();
-
-				// 동기화
 
 				// 반복 횟수 추가
 				count++;
@@ -62,13 +60,7 @@ namespace 스토쿠_콘솔
 
 			// 종료
 			Console.WriteLine("종료됨\n");
-			if(stoku.endCheck())
-			{
-				print.writeDefult(stoku.GetGameBase());
-			} else
-			{
-				print.bigHint(stoku.GetGameBase(), stoku.GetHint());
-			}
+			print.bigHintDefult(stoku.GetGameBase(), stoku.GetHint());
 			Console.ReadKey();
 		}
 	}

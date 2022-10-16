@@ -91,7 +91,6 @@ namespace 스토쿠_콘솔
 				{
 					if (gameBase[i, j] != 0)
 					{
-						// 문제?
 						for (int a = (i / 3) * 3; a < ((i / 3) * 3) + 3; a++)
 						{
 							for (int b = (j / 3) * 3; b < ((j / 3) * 3) + 3; b++)
@@ -130,7 +129,7 @@ namespace 스토쿠_콘솔
 			if(hintStart)
 			{
 				Console.WriteLine("힌트 초기화 됨\n");
-				print.writeTotalDefult(gameBase, hint);
+				print.bigHintDefult(gameBase, hint);
 			}
 			hintStart = false;
 		}
@@ -145,10 +144,10 @@ namespace 스토쿠_콘솔
 						for (int k = 0; k < 9; k++)
 							if (hint[k, i, j])
 							{
-								gameState[i, j] = k + 1;
-								int[] target = { i, j };
-								sync();
-								print.writeTargetTotal(count, "힌트 한개만 가지고 있는 칸 탐색", gameBase, hint, target);
+								int[] location = { i, j };
+								print.bigHintTargeting(count, "힌트 한개만 가지고 있는 칸 탐색", gameBase, hint, k, location);
+								gameBase[i, j] = k + 1;
+								reset();
 								return true;
 							}
 			return false;
@@ -183,7 +182,7 @@ namespace 스토쿠_콘솔
 						}
 						if(location[0] > -1)
 						{
-							print.writeTargetTotal(count, "상자 안 숨겨진 하나 Hidden Single : " + (k + 1), gameBase, hint, location);
+							print.bigHintTargeting(count, "상자 안 숨겨진 하나", gameBase, hint, k, location);
 							gameBase[location[0], location[1]] = k + 1;
 							reset();
 							return true;
@@ -239,7 +238,7 @@ namespace 스토쿠_콘솔
 							}
 							if(available)
 							{
-								print.intersetionPointing(count, gameBase, hint, k, true, (i * 3) + x);
+								print.bigHintIntersetingPointing(count, "교차로(포인팅)", gameBase, hint, k, j, (i * 3) + x, true);
 								for (int a = 0; a < 9; a++)
 								{
 									if (a / 3 != j && hint[k, (i * 3) + x, a])
@@ -264,7 +263,7 @@ namespace 스토쿠_콘솔
 							}
 							if(available)
 							{
-								print.intersetionPointing(count, gameBase, hint, k, false, (j * 3) + y);
+								print.bigHintIntersetingPointing(count, "교차로(포인팅)", gameBase, hint, k, i, (j * 3) + y, false);
 								for (int a = 0; a < 9; a++)
 								{
 									if (a / 3 != i && hint[k, a, (j * 3) + y])
