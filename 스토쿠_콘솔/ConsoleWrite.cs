@@ -8,7 +8,7 @@ namespace 스토쿠_콘솔
 {
 	class ConsoleWrite
 	{
-		// 한개 출력
+		// 기본 출력
 		public void writeDefult(int[,] state)
 		{
 			for (int i = 0; i < 9; i++)
@@ -19,40 +19,6 @@ namespace 스토쿠_콘솔
 				Console.WriteLine();
 			}
 			Console.ReadKey();
-			Console.WriteLine();
-		}
-
-		// nakedPair
-		public void nakedPair(long count, int[,] state, bool[,,] hint, bool targetDir, int lineNum, int[] targetNum)
-		{
-			Console.Write(count + "번째 드러난 둘 ");
-			if (targetDir) Console.Write("좌우 ");
-			else Console.Write("상하 ");
-			Console.WriteLine((targetNum[0] + 1) + ", " + (targetNum[1] + 1) + "\n");
-			for (int i = 0; i < 3; i++)
-			{
-				for (int j = 0; j < 9; j++)
-				{
-					for (int a = 0; a < 3; a++)
-					{
-						for (int b = 0; b < 9; b++)
-						{
-							Console.Write(" "); 
-							if ((targetNum[0] == (i * 3) + a || targetNum[1] == (i * 3) + a) && ((!targetDir && b == lineNum) || (targetDir && j == lineNum)))
-								Console.ForegroundColor = ConsoleColor.Red;
-							if (hint[(i * 3) + a, j, b]) Console.Write("1");
-							else Console.Write("0");
-							if ((targetNum[0] == (i * 3) + a || targetNum[1] == (i * 3) + a) && ((!targetDir && b == lineNum) || (targetDir && j == lineNum)))
-								Console.ForegroundColor = ConsoleColor.White;
-						}
-						Console.Write(" |");
-					}
-					Console.WriteLine();
-				}
-				Console.WriteLine();
-			}
-
-			writeDefult(state);
 			Console.WriteLine();
 		}
 
@@ -360,6 +326,101 @@ namespace 스토쿠_콘솔
 										}
 									}
 									else
+									{
+										Console.ForegroundColor = ConsoleColor.Green;
+									}
+								}
+								Console.Write(i2 * 3 + j2 + 1);
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+							else
+							{
+								Console.Write(" ");
+							}
+						}
+						if (j1 != 8)
+						{
+							if (j1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write(" |");
+							if (j1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+					}
+					Console.WriteLine();
+				}
+				for (int a = 0; a < 71; a++)
+				{
+					if (i1 != 8)
+					{
+						if (a % 8 == 7)
+						{
+							if (i1 % 3 == 2 || a % 24 == 23)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write("+");
+							if (i1 % 3 == 2 || a % 24 == 23)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+						else
+						{
+							if (i1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.Red;
+							}
+							Console.Write("-");
+							if (i1 % 3 == 2)
+							{
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+						}
+					}
+				}
+				Console.WriteLine();
+			}
+			Console.ReadKey();
+			Console.WriteLine();
+		}
+		// Naked Pair 드러난 둘
+		public void bigHintNakedPair(long count, string content, int[,] state, bool[,,] hint, int[] target, int lineNum, bool targetDir, int targetLocation1, int targetLocation2)
+		{
+			Console.WriteLine(count + "번째 " + content + " target : " + (target[0] + 1) + "," + (target[1] + 1) + "\n");
+			for (int i1 = 0; i1 < 9; i1++)  // X 셀
+			{
+				for (int i2 = 0; i2 < 3; i2++)  // X 힌트 셀
+				{
+					for (int j1 = 0; j1 < 9; j1++)  // Y 셀
+					{
+						for (int j2 = 0; j2 < 3; j2++)  // Y 힌트 셀
+						{
+							Console.Write(" ");
+							if (state[i1, j1] != 0 && i2 == 1 && j2 == 1)
+							{
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.Write(state[i1, j1]);
+								Console.ForegroundColor = ConsoleColor.White;
+							}
+							else if (hint[i2 * 3 + j2, i1, j1])
+							{
+								if(target[0] == i2 * 3 + j2 || target[1] == i2 * 3 + j2)
+								{
+									if((targetDir && lineNum == i1) || (!targetDir && lineNum == j1))
+									{
+										if((targetDir && (targetLocation1 == j1 || targetLocation2 == j1)) || (!targetDir && (targetLocation1 == i1 || targetLocation2 == i1)))
+										{
+											Console.ForegroundColor = ConsoleColor.Blue;
+										} else
+										{
+											Console.ForegroundColor = ConsoleColor.Red;
+										}
+									} else
 									{
 										Console.ForegroundColor = ConsoleColor.Green;
 									}

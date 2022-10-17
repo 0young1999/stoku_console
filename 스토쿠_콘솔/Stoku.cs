@@ -14,9 +14,7 @@ namespace 스토쿠_콘솔
 
 		// 변수
 			// 확정 칸
-		private int[,] gameBase = new int[9, 9];
-			// 현재 진행
-		private int[,] gameState = new int[9, 9];
+		private int[,] game = new int[9, 9];
 			// 힌트
 		private bool[,,] hint = new bool[9, 9, 9];
 			// 힌트 숫자
@@ -32,9 +30,8 @@ namespace 스토쿠_콘솔
 				for (int j = 0; j < 9; j++)
 				{
 					hintCount[i, j] = 9;
-					gameBase[i, j] = 0;
+					game[i, j] = 0;
 				}
-			sync();
 			for (int i = 0; i < 9; i++)
 				for (int j = 0; j < 9; j++)
 					for (int k = 0; k < 9; k++)
@@ -55,9 +52,8 @@ namespace 스토쿠_콘솔
 
 			// 파일 분석
 			Console.WriteLine("파일 내용 분석\n");
-			gameBase = io.FileAnalysis(fileLocation);
-			reset();
-			print.writeDefult(gameBase);
+			game = io.FileAnalysis(fileLocation);
+			print.writeDefult(game);
 		}
 		private Stoku() { }
 
@@ -74,7 +70,7 @@ namespace 스토쿠_콘솔
 		{
 			for (int i = 0; i < 9; i++)
 				for (int j = 0; j < 9; j++)
-					if (gameBase[i, j] != 0)
+					if (game[i, j] != 0)
 						for (int k = 0; k < 9; k++)
 							if (hint[k, i, j])
 							{
@@ -89,15 +85,15 @@ namespace 스토쿠_콘솔
 			{
 				for (int j = 0; j < 9; j++)
 				{
-					if (gameBase[i, j] != 0)
+					if (game[i, j] != 0)
 					{
 						for (int a = (i / 3) * 3; a < ((i / 3) * 3) + 3; a++)
 						{
 							for (int b = (j / 3) * 3; b < ((j / 3) * 3) + 3; b++)
 							{
-								if (hint[gameBase[i, j] - 1, a, b])
+								if (hint[game[i, j] - 1, a, b])
 								{
-									hint[gameBase[i, j] - 1, a, b] = false;
+									hint[game[i, j] - 1, a, b] = false;
 									hintCount[a, b]--;
 								}
 							}
@@ -111,17 +107,17 @@ namespace 스토쿠_콘솔
 		{
 			for (int i = 0; i < 9; i++)
 				for (int j = 0; j < 9; j++)
-					if (gameBase[i, j] != 0)
+					if (game[i, j] != 0)
 						for (int k = 0; k < 9; k++)
 						{
-							if(hint[gameBase[i, j] - 1, i, k])
+							if(hint[game[i, j] - 1, i, k])
 							{
-								hint[gameBase[i, j] - 1, i, k] = false;
+								hint[game[i, j] - 1, i, k] = false;
 								hintCount[i, k]--;
 							}
-							if(hint[gameBase[i, j] - 1, k, j])
+							if(hint[game[i, j] - 1, k, j])
 							{
-								hint[gameBase[i, j] - 1, k, j] = false;
+								hint[game[i, j] - 1, k, j] = false;
 								hintCount[k, j]--;
 							}
 						}
@@ -129,7 +125,7 @@ namespace 스토쿠_콘솔
 			if(hintStart)
 			{
 				Console.WriteLine("힌트 초기화 됨\n");
-				print.bigHintDefult(gameBase, hint);
+				print.bigHintDefult(game, hint);
 			}
 			hintStart = false;
 		}
@@ -145,9 +141,8 @@ namespace 스토쿠_콘솔
 							if (hint[k, i, j])
 							{
 								int[] location = { i, j };
-								print.bigHintTargeting(count, "힌트 한개만 가지고 있는 칸 탐색", gameBase, hint, k, location);
-								gameBase[i, j] = k + 1;
-								reset();
+								print.bigHintTargeting(count, "힌트 한개만 가지고 있는 칸 탐색", game, hint, k, location);
+								game[i, j] = k + 1;
 								return true;
 							}
 			return false;
@@ -182,9 +177,8 @@ namespace 스토쿠_콘솔
 						}
 						if(location[0] > -1)
 						{
-							print.bigHintTargeting(count, "상자 안 숨겨진 하나", gameBase, hint, k, location);
-							gameBase[location[0], location[1]] = k + 1;
-							reset();
+							print.bigHintTargeting(count, "상자 안 숨겨진 하나", game, hint, k, location);
+							game[location[0], location[1]] = k + 1;
 							return true;
 						}
 					}
@@ -238,7 +232,7 @@ namespace 스토쿠_콘솔
 							}
 							if(available)
 							{
-								print.bigHintIntersetingPointing(count, "교차로(포인팅)", gameBase, hint, k, j, (i * 3) + x, true);
+								print.bigHintIntersetingPointing(count, "교차로(포인팅)", game, hint, k, j, (i * 3) + x, true);
 								for (int a = 0; a < 9; a++)
 								{
 									if (a / 3 != j && hint[k, (i * 3) + x, a])
@@ -263,7 +257,7 @@ namespace 스토쿠_콘솔
 							}
 							if(available)
 							{
-								print.bigHintIntersetingPointing(count, "교차로(포인팅)", gameBase, hint, k, i, (j * 3) + y, false);
+								print.bigHintIntersetingPointing(count, "교차로(포인팅)", game, hint, k, i, (j * 3) + y, false);
 								for (int a = 0; a < 9; a++)
 								{
 									if (a / 3 != i && hint[k, a, (j * 3) + y])
@@ -332,7 +326,7 @@ namespace 스토쿠_콘솔
 						}
 						if(temp)
 						{
-							print.bigHintIntersetionClaiming(count, "교차로(클레이밍)X", gameBase, hint, num, checkX, x1, true);
+							print.bigHintIntersetionClaiming(count, "교차로(클레이밍)X", game, hint, num, checkX, x1, true);
 							for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
 							{
 								for (int hy = checkX * 3; hy < (checkX * 3) + 3; hy++)
@@ -361,7 +355,7 @@ namespace 스토쿠_콘솔
 						}
 						if(temp)
 						{
-							print.bigHintIntersetionClaiming(count, "교차로(클레이밍)Y", gameBase, hint, num, checkY, x1, false);
+							print.bigHintIntersetionClaiming(count, "교차로(클레이밍)Y", game, hint, num, checkY, x1, false);
 							for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
 							{
 								for (int hy = checkY * 3; hy < (checkY * 3) + 3; hy++)
@@ -437,7 +431,7 @@ namespace 스토쿠_콘솔
 
 										if(stanby > 4)
 										{
-											print.nakedPair(count, gameBase, hint, false, i1, temp1);
+											print.bigHintNakedPair(count, "드러난 둘Y", game, hint, temp1, i1, false, j1, j2);
 											for (int a1 = 0; a1 < 9; a1++)
 											{
 												if (a1 != j1 && a1 != j2)
@@ -503,7 +497,7 @@ namespace 스토쿠_콘솔
 
 										if (stanby > 4)
 										{
-											print.nakedPair(count, gameBase, hint, true, i1, temp1);
+											print.bigHintNakedPair(count, "드러난 둘X", game, hint, temp1, i1, true, j1, j2);
 											for (int a1 = 0; a1 < 9; a1++)
 											{
 												if (a1 != j1 && a1 != j2)
@@ -541,7 +535,7 @@ namespace 스토쿠_콘솔
 			{
 				for(int j = 0; j < 9; j++)
 				{
-					if(gameBase[i,j] == 0)
+					if(game[i,j] == 0)
 					{
 						return false;
 					}
@@ -550,12 +544,8 @@ namespace 스토쿠_콘솔
 			return true;
 		}
 
-		// auto
-		public void sync() { this.gameBase = this.gameState; }
-		public void reset() { this.gameState = this.gameBase; }
-
 		// get
-		public int[,] GetGameBase() { return gameBase; }
+		public int[,] GetGameBase() { return game; }
 		public bool[,,] GetHint() { return hint; }
 	}
 }
