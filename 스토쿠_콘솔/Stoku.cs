@@ -332,7 +332,7 @@ namespace 스토쿠_콘솔
 						}
 						if(temp)
 						{
-							print.intersetionClaiming(count, gameBase, hint, num, x1, true);
+							print.bigHintIntersetionClaiming(count, "교차로(클레이밍)X", gameBase, hint, num, checkX, x1, true);
 							for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
 							{
 								for (int hy = checkX * 3; hy < (checkX * 3) + 3; hy++)
@@ -361,7 +361,7 @@ namespace 스토쿠_콘솔
 						}
 						if(temp)
 						{
-							print.intersetionClaiming(count, gameBase, hint, num, x1, false);
+							print.bigHintIntersetionClaiming(count, "교차로(클레이밍)Y", gameBase, hint, num, checkY, x1, false);
 							for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
 							{
 								for (int hy = checkY * 3; hy < (checkY * 3) + 3; hy++)
