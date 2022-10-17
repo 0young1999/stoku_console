@@ -201,72 +201,58 @@ namespace 스토쿠_콘솔
 						int y = -1;
 						for (int a = 0; a < 3; a++) // 셀
 						{
-							bool foucusX = false;
-							bool foucusY = false;
 							for (int b = 0; b < 3; b++)
 							{
-								if (hint[k, (i * 3) + a, (j * 3) + b]) foucusX = true;
-								if (hint[k, (i * 3) + b, (j * 3) + a]) foucusY = true;
-							}
-							if(foucusX)
-							{
-								if (x == -1) x = a;
-								else x = -2;
-							}
-							if(foucusY)
-							{
-								if (y == -1) y = a;
-								else y = -2;
+								if (hint[k, (i * 3) + a, (j * 3) + b])
+								{
+									if (x == -1) x = a;
+									else x = -2;
+								}
+								if (hint[k, (i * 3) + b, (j * 3) + a])
+								{
+									if (y == -1) y = a;
+									else y = -2;
+								}
 							}
 						}
 						// x
 						if(x > -1)
 						{
-							bool available = false;
 							for(int a = 0; a < 9; a++)
 							{
 								if (a / 3 != j && hint[k, (i * 3) + x, a])
 								{
-									available = true;
-								}
-							}
-							if(available)
-							{
-								print.bigHintIntersetingPointing(count, "교차로(포인팅)", game, hint, k, j, (i * 3) + x, true);
-								for (int a = 0; a < 9; a++)
-								{
-									if (a / 3 != j && hint[k, (i * 3) + x, a])
+									print.bigHintIntersetingPointing(count, "교차로(포인팅)", game, hint, k, j, (i * 3) + x, true);
+									for (int b = 0; b < 9; b++)
 									{
-										hint[k, (i * 3) + x, a] = false;
-										hintCount[(i * 3) + x, a]--;
+										if (b / 3 != j && hint[k, (i * 3) + x, b])
+										{
+											hint[k, (i * 3) + x, b] = false;
+											hintCount[(i * 3) + x, b]--;
+										}
 									}
+									return true;
 								}
-								return true;
 							}
 						}
 						// y
 						if(y > -1)
 						{
-							bool available = false;
 							for (int a = 0; a < 9; a++)
 							{
 								if (a / 3 != i && hint[k, a, (j * 3) + y])
 								{
-									available = true;
-								}
-							}
-							if(available)
-							{
-								print.bigHintIntersetingPointing(count, "교차로(포인팅)", game, hint, k, i, (j * 3) + y, false);
-								for (int a = 0; a < 9; a++)
-								{
-									if (a / 3 != i && hint[k, a, (j * 3) + y])
+									print.bigHintIntersetingPointing(count, "교차로(포인팅)", game, hint, k, i, (j * 3) + y, false);
+									for (int b = 0; b < 9; b++)
 									{
-										hint[k, a, (j * 3) + y] = false;
-										hintCount[a, (j * 3) + y]--;
+										if (b / 3 != i && hint[k, b, (j * 3) + y])
+										{
+											hint[k, b, (j * 3) + y] = false;
+											hintCount[b, (j * 3) + y]--;
+										}
 									}
+									return true;
 								}
-								return true;
 							}
 						}
 					}
@@ -313,60 +299,56 @@ namespace 스토쿠_콘솔
 					}
 					if(checkX > -1)
 					{
-						bool temp = false;
 						for(int i = (x1 / 3) * 3; i < ((x1 / 3) * 3) + 3; i++)
 						{
 							if(i != x1)
 							{
 								for (int hy = checkX * 3; hy < (checkX * 3) + 3; hy++)
 								{
-									if (hint[num, i, hy]) temp = true;
-								}
-							}
-						}
-						if(temp)
-						{
-							print.bigHintIntersetionClaiming(count, "교차로(클레이밍)X", game, hint, num, checkX, x1, true);
-							for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
-							{
-								for (int hy = checkX * 3; hy < (checkX * 3) + 3; hy++)
-								{
-									if (hx != x1)
+									if (hint[num, i, hy])
 									{
-										hint[num, hx, hy] = false;
+										print.bigHintIntersetionClaiming(count, "교차로(클레이밍)X", game, hint, num, checkX, x1, true);
+										for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
+										{
+											for (int hy1 = checkX * 3; hy1 < (checkX * 3) + 3; hy1++)
+											{
+												if (hx != x1)
+												{
+													hint[num, hx, hy1] = false;
+												}
+											}
+										}
+										return true;
 									}
 								}
 							}
-							return true;
 						}
 					}
 					if (checkY > -1)
 					{
-						bool temp = false;
 						for (int i = (x1 / 3) * 3; i < ((x1 / 3) * 3) + 3; i++)
 						{
 							if (i != x1)
 							{
 								for (int hy = checkY * 3; hy < (checkY * 3) + 3; hy++)
 								{
-									if (hint[num, hy, i]) temp = true;
-								}
-							}
-						}
-						if(temp)
-						{
-							print.bigHintIntersetionClaiming(count, "교차로(클레이밍)Y", game, hint, num, checkY, x1, false);
-							for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
-							{
-								for (int hy = checkY * 3; hy < (checkY * 3) + 3; hy++)
-								{
-									if (hx != x1)
+									if (hint[num, hy, i])
 									{
-										hint[num, hy, hx] = false;
+										print.bigHintIntersetionClaiming(count, "교차로(클레이밍)Y", game, hint, num, checkY, x1, false);
+										for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
+										{
+											for (int hy1 = checkY * 3; hy1 < (checkY * 3) + 3; hy1++)
+											{
+												if (hx != x1)
+												{
+													hint[num, hy1, hx] = false;
+												}
+											}
+										}
+										return true;
 									}
 								}
 							}
-							return true;
 						}
 					}
 				}
