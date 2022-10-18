@@ -29,24 +29,11 @@ namespace 스토쿠_콘솔
 
 			string[] tempS = temp.Split('\n');
 
-			if(tempS.Length != 9)
-			{
-				Console.WriteLine("text 파일 오류 숫자 부족 " + tempS.Length);
-				for (int i = 0; i < tempS.Length; i++)
-					Console.WriteLine(i + " : " + tempS[i]);
-				Console.ReadKey();
-				Environment.Exit(0);
-			}
+			if (tempS.Length != 9) return null;
 
 			for(int i = 0; i < 9; i++)
 			{
-				if(tempS[i].Trim().Split(' ').Length != 9)
-				{
-					Console.WriteLine("text 파일 오류 숫자 부족 " + tempS[i].Split(' ').Length);
-					Console.WriteLine(tempS[i]);
-					Console.ReadKey();
-					Environment.Exit(0);
-				}
+				if (tempS[i].Trim().Split(' ').Length != 9) return null;
 			}
 
 			for(int i = 0; i < 9; i++)

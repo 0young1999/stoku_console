@@ -573,7 +573,6 @@ namespace 스토쿠_콘솔
 		public void bigHIntNakedTriple(long count, string content, int[,] state, bool[,,] hint, int[] target, int lineNum, bool targetDir, int[] location)
 		{
 			Console.WriteLine(count + "번째 " + content + " target : " + (target[0] + 1) + "," + (target[1] + 1) + "," + (target[2] + 1) + "\n");
-			Console.WriteLine(location[0] + " , " + location[1] + " , " + location[2] + " line " + lineNum);
 			for (int i1 = 0; i1 < 9; i1++)  // X 셀
 			{
 				for (int i2 = 0; i2 < 3; i2++)  // X 힌트 셀

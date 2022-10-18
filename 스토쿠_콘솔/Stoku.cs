@@ -21,11 +21,8 @@ namespace 스토쿠_콘솔
 		private int[,] hintCount = new int[9, 9];
 			// 힌트 표시 여부
 		private bool hintStart = true;
-			// 디버그 힌트 카운트
-		private bool debugHintCount = false;
 
-
-		public Stoku(String fileLocation)
+		public Stoku(int[,] gameSet)
 		{
 			// 변수 초기화
 			for (int i = 0; i < 9; i++)
@@ -39,23 +36,13 @@ namespace 스토쿠_콘솔
 					for (int k = 0; k < 9; k++)
 						hint[k, i, j] = true;
 
-
 			// 클래스 로드
 				// 파일 입출력
 			io = new FileIo();
 				// 화면 출력
 			print = new ConsoleWrite();
 
-			// 파일 불러오기
-			Console.WriteLine("파일 내용 확인\n");
-			Console.WriteLine(io.FileFullLoad(fileLocation));
-			Console.ReadKey();
-			Console.WriteLine();
-
-			// 파일 분석
-			Console.WriteLine("파일 내용 분석\n");
-			game = io.FileAnalysis(fileLocation);
-			print.writeDefult(game);
+			game = gameSet;
 		}
 		private Stoku() { }
 
@@ -143,7 +130,6 @@ namespace 스토쿠_콘솔
 							if (hint[k, i, j])
 							{
 								int[] location = { i, j };
-								if (debugHintCount) print.writeDefult(hintCount);
 								print.bigHintTargeting(count, "힌트 한개만 가지고 있는 칸 탐색", game, hint, k, location);
 								game[i, j] = k + 1;
 								return true;
@@ -180,7 +166,6 @@ namespace 스토쿠_콘솔
 						}
 						if(location[0] > -1)
 						{
-							if (debugHintCount) print.writeDefult(hintCount);
 							print.bigHintTargeting(count, "상자 안 숨겨진 하나", game, hint, k, location);
 							game[location[0], location[1]] = k + 1;
 							return true;
@@ -226,7 +211,6 @@ namespace 스토쿠_콘솔
 							{
 								if (a / 3 != j && hint[k, (i * 3) + x, a])
 								{
-									if (debugHintCount) print.writeDefult(hintCount);
 									print.bigHintIntersetingPointing(count, "교차로(포인팅)", game, hint, k, j, (i * 3) + x, true);
 									for (int b = 0; b < 9; b++)
 									{
@@ -247,7 +231,6 @@ namespace 스토쿠_콘솔
 							{
 								if (a / 3 != i && hint[k, a, (j * 3) + y])
 								{
-									if (debugHintCount) print.writeDefult(hintCount);
 									print.bigHintIntersetingPointing(count, "교차로(포인팅)", game, hint, k, i, (j * 3) + y, false);
 									for (int b = 0; b < 9; b++)
 									{
@@ -313,7 +296,6 @@ namespace 스토쿠_콘솔
 								{
 									if (hint[num, i, hy])
 									{
-										if (debugHintCount) print.writeDefult(hintCount);
 										print.bigHintIntersetionClaiming(count, "교차로(클레이밍)X", game, hint, num, checkX, x1, true);
 										for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
 										{
@@ -342,7 +324,6 @@ namespace 스토쿠_콘솔
 								{
 									if (hint[num, hy, i])
 									{
-										if (debugHintCount) print.writeDefult(hintCount);
 										print.bigHintIntersetionClaiming(count, "교차로(클레이밍)Y", game, hint, num, checkY, x1, false);
 										for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
 										{
@@ -423,7 +404,6 @@ namespace 스토쿠_콘솔
 
 										if(stanby > 4)
 										{
-											if (debugHintCount) print.writeDefult(hintCount);
 											print.bigHintNakedPair(count, "드러난 둘Y", game, hint, temp1, i1, false, j1, j2);
 											for (int a1 = 0; a1 < 9; a1++)
 											{
@@ -492,7 +472,6 @@ namespace 스토쿠_콘솔
 
 										if (stanby > 4)
 										{
-											if (debugHintCount) print.writeDefult(hintCount);
 											print.bigHintNakedPair(count, "드러난 둘X", game, hint, temp1, i1, true, j1, j2);
 											for (int a1 = 0; a1 < 9; a1++)
 											{
@@ -606,7 +585,6 @@ namespace 스토쿠_콘솔
 								}
 								if (dump)
 								{
-									if (debugHintCount) print.writeDefult(hintCount);
 									print.bigHIntNakedTriple(count, "드러난 셋 X", game, hint, target, x, true, locationY);
 									for(int y = 0; y < 9; y++)
 									{
@@ -694,7 +672,6 @@ namespace 스토쿠_콘솔
 								}
 								if (dump)
 								{
-									if(debugHintCount) print.writeDefult(hintCount);
 									print.bigHIntNakedTriple(count, "드러난 셋 Y", game, hint, target, x, false, locationY);
 									for (int y = 0; y < 9; y++)
 									{
@@ -724,6 +701,38 @@ namespace 스토쿠_콘솔
 					}
 				}
 			}
+			return false;
+		}
+
+		public bool customMode(int num, int x, int y)
+		{
+			if(num != -1)
+			{
+				if(hint[num, x, y])
+				{
+					hintCount[x, y]--;
+					hint[num, x, y] = false;
+				}
+				print.bigHintDefult(game, hint);
+			}
+
+			return true;
+		}
+
+		public bool temp(int num, int x, int y)
+		{
+			if (num != -1)
+			{
+				if (hint[num, x, y])
+				{
+					hintCount[x, y]--;
+					hint[num, x, y] = false;
+					Console.WriteLine("temp!");
+					print.bigHintDefult(game, hint);
+					return true;
+				}
+			}
+
 			return false;
 		}
 

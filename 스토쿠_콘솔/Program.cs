@@ -20,15 +20,27 @@ namespace 스토쿠_콘솔
 				// 파일명
 			string fileName = "Naked Triple.txt";
 
+			// 클래스 로드
+				// 화면 출력
+			ConsoleWrite print = new ConsoleWrite();
+				// 파일
+			FileIo io = new FileIo();
+				// 스토쿠
+			Stoku stoku = null;
+
+			// 파일 불러오기
+			Console.WriteLine("파일 내용 확인\n");
+			Console.WriteLine(io.FileFullLoad(fileName));
+			Console.ReadKey();
+			Console.WriteLine();
+
 			// 변수
 				// 반복 횟수 확인
 			long count = 0;
 				// 스토쿠
-			Stoku stoku = new Stoku(fileName);
-
-			// 클래스 로드
-				// 화면 출력
-			ConsoleWrite print = new ConsoleWrite();
+			int[,] game = io.FileAnalysis(fileName);
+			if (game == null) return;
+			stoku = new Stoku(game);
 
 			// 공식으로 인한 탐색
 			while (true)
@@ -72,6 +84,32 @@ namespace 스토쿠_콘솔
 			{
 				Console.WriteLine("답을 다 찾지 못함!");
 				print.bigHintEndCheck(stoku.GetGameBase(), stoku.GetHint());
+
+				while (true) {
+					Console.WriteLine("num x y");
+					string controll1 = Console.ReadLine();
+					int num = 0, x = 0, y = 0;
+					try
+					{
+						string[] controll2 = controll1.Trim().Split(' ');
+						if (controll2.Length != 3)
+						{
+							Console.WriteLine("입력 오류 " + controll1);
+							continue;
+						}
+						num = int.Parse(controll2[0].Trim());
+						x = int.Parse(controll2[1].Trim());
+						y = int.Parse(controll2[2].Trim());
+					} catch (Exception e)
+					{
+						Console.WriteLine(controll1);
+						Console.WriteLine(e.Message);
+					}
+
+					if (stoku.customMode(num - 1, x - 1, y - 1)) continue;
+
+					break;
+				}
 			}
 			Console.ReadKey();
 		}
