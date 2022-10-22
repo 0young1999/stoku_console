@@ -15,13 +15,17 @@ namespace 스토쿠_콘솔
 			Console.SetWindowSize(100, 39);
 				// 콘솔 색상
 			Console.ForegroundColor = ConsoleColor.White;
-			
+
 			// 설정 변수
-				// 파일명
+			// 파일명
 			string fileName = "Naked Triple.txt";
+			//string fileName = "Naked Pair.txt";
+			//string fileName = "test.txt";
+			//string fileName = "Intersetion(Pointing).txt";
+			//string fileName = "test1.txt";
 
 			// 클래스 로드
-				// 화면 출력
+			// 화면 출력
 			ConsoleWrite print = new ConsoleWrite();
 				// 파일
 			FileIo io = new FileIo();

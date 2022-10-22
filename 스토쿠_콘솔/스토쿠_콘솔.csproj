@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Result.cs" />
     <Compile Include="ConsoleWrite.cs" />
     <Compile Include="FileIo.cs" />
     <Compile Include="Program.cs" />
