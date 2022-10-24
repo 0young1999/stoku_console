@@ -121,7 +121,7 @@ namespace 스토쿠_콘솔
 
 
 		// 힌트 한개만 가지고 있는 칸 탐색
-		public bool onlyOneHintScan(long count)
+		public Result onlyOneHintScan(long count)
 		{
 			for (int i = 0; i < 9; i++)
 				for (int j = 0; j < 9; j++)
@@ -130,17 +130,16 @@ namespace 스토쿠_콘솔
 							if (hint[k, i, j])
 							{
 								int[] location = { i, j };
-								Result result = new Result(true, game, hint, " " + count + "번 힌트 한개만 가지고 있는 칸 탐색");
+								Result result = new Result(game, hint, " " + count + "번 힌트 한개만 가지고 있는 칸 탐색");
 								result.targetOne(k, location);
-								print.print(result);
 								game[i, j] = k + 1;
-								return true;
+								return result;
 							}
-			return false;
+			return null;
 		}
 
 		// 상자 안 숨겨진 하나 Hidden Single
-		public bool boxInHiddenSingle(long count)
+		public Result boxInHiddenSingle(long count)
 		{
 			for (int k = 0; k < 9; k++)	// 들어갈 숫자
 			{
@@ -168,21 +167,20 @@ namespace 스토쿠_콘솔
 						}
 						if(location[0] > -1)
 						{
-							Result result = new Result(true, game, hint, " " + count + "번 상자안에 숨겨진 하나");
+							Result result = new Result(game, hint, " " + count + "번 상자안에 숨겨진 하나");
 							result.targetOne(k, location);
-							print.print(result);
 							game[location[0], location[1]] = k + 1;
-							return true;
+							return result;
 						}
 					}
 				}
 			}
-			return false;
+			return null;
 		}
 
 
 		// Intersetion(pointing) 교차로(포인팅)
-		public bool intersetingPointing(long count)
+		public Result intersetingPointing(long count)
 		{
 			for (int k = 0; k < 9; k++)	// 들어갈 숫자
 			{
@@ -215,9 +213,8 @@ namespace 스토쿠_콘솔
 							{
 								if (a / 3 != j && hint[k, (i * 3) + x, a])
 								{
-									Result result = new Result(true, game, hint, " " + count + "번째 교차로(포인팅)");
+									Result result = new Result(game, hint, " " + count + "번째 교차로(포인팅)");
 									result.intersetion(k, j, (i * 3) + x, true);
-									print.print(result);
 									for (int b = 0; b < 9; b++)
 									{
 										if (b / 3 != j && hint[k, (i * 3) + x, b])
@@ -226,7 +223,7 @@ namespace 스토쿠_콘솔
 											hintCount[(i * 3) + x, b]--;
 										}
 									}
-									return true;
+									return result;
 								}
 							}
 						}
@@ -237,9 +234,8 @@ namespace 스토쿠_콘솔
 							{
 								if (a / 3 != i && hint[k, a, (j * 3) + y])
 								{
-									Result result = new Result(true, game, hint, " " + count + "번째 교차로(포인팅)");
+									Result result = new Result(game, hint, " " + count + "번째 교차로(포인팅)");
 									result.intersetion(k, i, (j * 3) + y, false);
-									print.print(result);
 									for (int b = 0; b < 9; b++)
 									{
 										if (b / 3 != i && hint[k, b, (j * 3) + y])
@@ -248,7 +244,7 @@ namespace 스토쿠_콘솔
 											hintCount[b, (j * 3) + y]--;
 										}
 									}
-									return true;
+									return result;
 								}
 							}
 						}
@@ -256,11 +252,11 @@ namespace 스토쿠_콘솔
 				}
 			}
 
-			return false;
+			return null;
 		}
 
 		// Intersetion(Claiming) 교차로(클레이밍)
-		public bool intersetionClaiming(long count)
+		public Result intersetionClaiming(long count)
 		{
 			for (int num = 0; num < 9; num++)	// 숫자
 			{
@@ -304,9 +300,8 @@ namespace 스토쿠_콘솔
 								{
 									if (hint[num, i, hy])
 									{
-										Result result = new Result(true, game, hint, " " + count + "번 교차로(클레이밍)X");
+										Result result = new Result(game, hint, " " + count + "번 교차로(클레이밍)X");
 										result.intersetion(num, checkX, x1, true);
-										print.print(result);
 										for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
 										{
 											for (int hy1 = checkX * 3; hy1 < (checkX * 3) + 3; hy1++)
@@ -318,7 +313,7 @@ namespace 스토쿠_콘솔
 												}
 											}
 										}
-										return true;
+										return result;
 									}
 								}
 							}
@@ -334,9 +329,8 @@ namespace 스토쿠_콘솔
 								{
 									if (hint[num, hy, i])
 									{
-										Result result = new Result(true, game, hint, " " + count + "번 교차로(클레이밍)Y");
+										Result result = new Result(game, hint, " " + count + "번 교차로(클레이밍)Y");
 										result.intersetion(num, checkY, x1, false);
-										print.print(result);
 										for (int hx = (x1 / 3) * 3; hx < ((x1 / 3) * 3) + 3; hx++)
 										{
 											for (int hy1 = checkY * 3; hy1 < (checkY * 3) + 3; hy1++)
@@ -348,7 +342,7 @@ namespace 스토쿠_콘솔
 												}
 											}
 										}
-										return true;
+										return result;
 									}
 								}
 							}
@@ -357,11 +351,11 @@ namespace 스토쿠_콘솔
 				}
 			}
 
-			return false;
+			return null;
 		}
 
 		// Naked Pair 드러난 둘
-		public bool nakedPair(long count)
+		public Result nakedPair(long count)
 		{
 			// line
 			for (int i1 = 0; i1 < 9; i1++)
@@ -417,9 +411,8 @@ namespace 스토쿠_콘솔
 										if(stanby > 4)
 										{
 											int[] location = { j1, j2 };
-											Result result = new Result(true, game, hint, " " + count + "번째 드러난 둘Y");
+											Result result = new Result(game, hint, " " + count + "번째 드러난 둘Y");
 											result.nakedPair(temp1, i1, false, location);
-											print.print(result);
 											for (int a1 = 0; a1 < 9; a1++)
 											{
 												if (a1 != j1 && a1 != j2)
@@ -436,7 +429,7 @@ namespace 스토쿠_콘솔
 													}
 												}
 											}
-											return true;
+											return result;
 										}
 									}
 								}
@@ -488,9 +481,8 @@ namespace 스토쿠_콘솔
 										if (stanby > 4)
 										{
 											int[] location = { j1, j2 };
-											Result result = new Result(true, game, hint, " " + count + "번째 드러난 둘X");
+											Result result = new Result(game, hint, " " + count + "번째 드러난 둘X");
 											result.nakedPair(temp1, i1, true, location);
-											print.print(result);
 											for (int a1 = 0; a1 < 9; a1++)
 											{
 												if (a1 != j1 && a1 != j2)
@@ -507,7 +499,7 @@ namespace 스토쿠_콘솔
 													}
 												}
 											}
-											return true;
+											return result;
 										}
 									}
 								}
@@ -519,11 +511,11 @@ namespace 스토쿠_콘솔
 
 			// box
 
-			return false;
+			return null;
 		}
 
 		// Naked Triple 드러난 셋
-		public bool nakedTriple(long count)
+		public Result nakedTriple(long count)
 		{
 			for(int x = 0; x < 9; x++)
 			{
@@ -602,9 +594,8 @@ namespace 스토쿠_콘솔
 								}
 								if (dump)
 								{
-									Result result = new Result(true, game, hint, " " + count + "번째 드러난 셋 X");
+									Result result = new Result(game, hint, " " + count + "번째 드러난 셋 X");
 									result.nakedTriple(target, x, true, locationY);
-									print.print(result);
 									for(int y = 0; y < 9; y++)
 									{
 										if(y != locationY[0] && y != locationY[1] && y != locationY[2])
@@ -625,7 +616,7 @@ namespace 스토쿠_콘솔
 											}
 										}
 									}
-									return true;
+									return result;
 								}
 							}
 							// Y
@@ -690,9 +681,8 @@ namespace 스토쿠_콘솔
 								}
 								if (dump)
 								{
-									Result result = new Result(true, game, hint, " " + count + "번째 드러난 셋 Y");
+									Result result = new Result(game, hint, " " + count + "번째 드러난 셋 Y");
 									result.nakedTriple(target, x, false, locationY);
-									print.print(result);
 									for (int y = 0; y < 9; y++)
 									{
 										if (y != locationY[0] && y != locationY[1] && y != locationY[2])
@@ -714,46 +704,14 @@ namespace 스토쿠_콘솔
 											}
 										}
 									}
-									return true;
+									return result;
 								}
 							}
 						}
 					}
 				}
 			}
-			return false;
-		}
-
-		public bool customMode(int num, int x, int y)
-		{
-			if(num != -1)
-			{
-				if(hint[num, x, y])
-				{
-					hintCount[x, y]--;
-					hint[num, x, y] = false;
-				}
-				print.bigHintDefult(game, hint);
-			}
-
-			return true;
-		}
-
-		public bool temp(int num, int x, int y)
-		{
-			if (num != -1)
-			{
-				if (hint[num, x, y])
-				{
-					hintCount[x, y]--;
-					hint[num, x, y] = false;
-					Console.WriteLine("temp!");
-					print.bigHintDefult(game, hint);
-					return true;
-				}
-			}
-
-			return false;
+			return null;
 		}
 
 		// end check

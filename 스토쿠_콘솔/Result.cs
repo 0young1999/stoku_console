@@ -8,8 +8,6 @@ namespace 스토쿠_콘솔
 {
 	class Result
 	{
-		// 결과
-		private bool state = false;
 		// 게임 상태
 		private int[,] game = null;
 		// 힌트 상태
@@ -24,7 +22,6 @@ namespace 스토쿠_콘솔
 		private string content = "";
 
 		// get
-		public bool GetState() { return state; }
 		public int[,] GetGame() { return game; }
 		public int GetGameDetail(int x, int y) { return game[x, y]; }
 		public bool[,,] GetHInt() { return hint; }
@@ -35,11 +32,10 @@ namespace 스토쿠_콘솔
 
 		// 생성자
 		private Result() { }
-		public Result(bool state, int[,] game, bool[,,] hint, string content)
+		public Result(int[,] game, bool[,,] hint, string content)
 		{
-			this.state = state;
-			this.game = game;
-			this.hint = hint;
+			this.game = (int[,])game.Clone();
+			this.hint = (bool[,,])hint.Clone();
 			this.content = content;
 
 			hintColor = new int[9, 9, 9];

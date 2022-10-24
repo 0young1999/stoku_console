@@ -8,23 +8,6 @@ namespace 스토쿠_콘솔
 {
 	class ConsoleWrite
 	{
-		// 기본 출력
-		public void writeDefult(int[,] state)
-		{
-			for (int i = 0; i < 9; i++)
-			{
-				Console.Write(state[i, 0]);
-				for (int j = 1; j < 9; j++)
-					Console.Write(" " + state[i, j]);
-				Console.WriteLine();
-			}
-			Console.ReadKey();
-			Console.WriteLine();
-		}
-
-		/**
-		 * 최종
-		 * **/
 		// 콘솔 색깔
 		private void consoleColor(int num)
 		{
@@ -61,28 +44,6 @@ namespace 스토쿠_콘솔
 						for (int j2 = 0; j2 < 3; j2++)  // Y 힌트 셀
 						{
 							Console.Write(" ");
-							//if (state[i1, j1] != 0 && i2 == 1 && j2 == 1)
-							//{
-							//	Console.ForegroundColor = ConsoleColor.Yellow;
-							//	Console.Write(state[i1, j1]);
-							//	Console.ForegroundColor = ConsoleColor.White;
-							//}
-							//else if (hint[i2 * 3 + j2, i1, j1])
-							//{
-							//	if ((i2 * 3 + j2 + 1) == (target + 1))
-							//	{
-							//		if (i1 == location[0] && j1 == location[1])
-							//		{
-							//			Console.ForegroundColor = ConsoleColor.Blue;
-							//		}
-							//		else
-							//		{
-							//			Console.ForegroundColor = ConsoleColor.Green;
-							//		}
-							//	}
-							//	Console.Write(i2 * 3 + j2 + 1);
-							//	Console.ForegroundColor = ConsoleColor.White;
-							//}
 							if(result.GetGameDetail(i1, j1) != 0 && i2 == 1 && j2 == 1)	// 셀 확정됨
 							{
 								consoleColor(4);

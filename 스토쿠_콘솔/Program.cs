@@ -17,15 +17,17 @@ namespace 스토쿠_콘솔
 			Console.ForegroundColor = ConsoleColor.White;
 
 			// 설정 변수
-			// 파일명
+				// 파일명
 			string fileName = "Naked Triple.txt";
 			//string fileName = "Naked Pair.txt";
 			//string fileName = "test.txt";
 			//string fileName = "Intersetion(Pointing).txt";
 			//string fileName = "test1.txt";
+				// 출력 여부
+			bool printState = false;
 
 			// 클래스 로드
-			// 화면 출력
+				// 화면 출력
 			ConsoleWrite print = new ConsoleWrite();
 				// 파일
 			FileIo io = new FileIo();
@@ -55,23 +57,57 @@ namespace 스토쿠_콘솔
 				// 반복 횟수 추가
 				count++;
 
+				// result
+				Result result = null;
+
 				// 힌트 한개만 가지는 경우
-				if (stoku.onlyOneHintScan(count)) continue;
+
+				result = stoku.onlyOneHintScan(count);
+				if(result != null)
+				{
+					if(printState) print.print(result);
+					continue;
+				}
 
 				// 상자 안 숨겨진 하나 Hidden Single
-				if (stoku.boxInHiddenSingle(count)) continue;
+				result = stoku.boxInHiddenSingle(count);
+				if (result != null)
+				{
+					if (printState) print.print(result);
+					continue;
+				}
 
 				// Intersetion(pointing) 교차로(포인팅)
-				if (stoku.intersetingPointing(count)) continue;
+				result = stoku.intersetingPointing(count);
+				if (result != null)
+				{
+					if (printState) print.print(result);
+					continue;
+				}
 
 				// Intersetion(Claiming) 교차로(클레이밍)
-				if (stoku.intersetionClaiming(count)) continue;
+				result = stoku.intersetionClaiming(count);
+				if (result != null)
+				{
+					if (printState) print.print(result);
+					continue;
+				}
 
 				// Naked Pair 드라난 둘
-				if (stoku.nakedPair(count)) continue;
+				result = stoku.nakedPair(count);
+				if (result != null)
+				{
+					if (printState) print.print(result);
+					continue;
+				}
 
 				// Naked Triple 드러난 셋
-				if (stoku.nakedTriple(count)) continue;
+				result = stoku.nakedTriple(count);
+				if (result != null)
+				{
+					if (printState) print.print(result);
+					continue;
+				}
 
 				// Hidden Pair 숨겨진 둘
 
@@ -88,32 +124,6 @@ namespace 스토쿠_콘솔
 			{
 				Console.WriteLine("답을 다 찾지 못함!");
 				print.bigHintEndCheck(stoku.GetGameBase(), stoku.GetHint());
-
-				while (true) {
-					Console.WriteLine("num x y");
-					string controll1 = Console.ReadLine();
-					int num = 0, x = 0, y = 0;
-					try
-					{
-						string[] controll2 = controll1.Trim().Split(' ');
-						if (controll2.Length != 3)
-						{
-							Console.WriteLine("입력 오류 " + controll1);
-							continue;
-						}
-						num = int.Parse(controll2[0].Trim());
-						x = int.Parse(controll2[1].Trim());
-						y = int.Parse(controll2[2].Trim());
-					} catch (Exception e)
-					{
-						Console.WriteLine(controll1);
-						Console.WriteLine(e.Message);
-					}
-
-					if (stoku.customMode(num - 1, x - 1, y - 1)) continue;
-
-					break;
-				}
 			}
 			Console.ReadKey();
 		}
