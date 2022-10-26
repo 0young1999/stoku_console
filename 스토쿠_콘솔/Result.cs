@@ -22,11 +22,8 @@ namespace 스토쿠_콘솔
 		private string content = "";
 
 		// get
-		public int[,] GetGame() { return game; }
 		public int GetGameDetail(int x, int y) { return game[x, y]; }
-		public bool[,,] GetHInt() { return hint; }
 		public bool GetHintDetail(int num, int x, int y) { return hint[num, x, y]; }
-		public int[,,] GetHIntColor() { return hintColor; }
 		public int GetHintColorDetail(int num, int x, int y) { return hintColor[num, x, y]; }
 		public string GetContent() { return content; }
 

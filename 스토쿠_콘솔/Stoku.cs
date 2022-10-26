@@ -8,10 +8,6 @@ namespace 스토쿠_콘솔
 {
 	class Stoku
 	{
-		// 클래스
-		FileIo io = null;
-		ConsoleWrite print = null;
-
 		// 변수
 			// 확정 칸
 		private int[,] game = new int[9, 9];
@@ -19,8 +15,6 @@ namespace 스토쿠_콘솔
 		private bool[,,] hint = new bool[9, 9, 9];
 			// 힌트 숫자
 		private int[,] hintCount = new int[9, 9];
-			// 힌트 표시 여부
-		private bool hintStart = true;
 
 		public Stoku(int[,] gameSet)
 		{
@@ -36,23 +30,20 @@ namespace 스토쿠_콘솔
 					for (int k = 0; k < 9; k++)
 						hint[k, i, j] = true;
 
-			// 클래스 로드
-				// 파일 입출력
-			io = new FileIo();
-				// 화면 출력
-			print = new ConsoleWrite();
-
 			game = gameSet;
 		}
 		private Stoku() { }
 
 
 		// 힌트
-		public void hintScan()
+		public Result hintScan()
 		{
 			nullScan();
 			totalBluckScan();
 			totalLineScan();
+
+			Result result = new Result(game, hint, "힌트 초기화");
+			return result;
 		}
 			// 빈공간 탐색
 		private void nullScan()
@@ -91,7 +82,7 @@ namespace 스토쿠_콘솔
 				}
 			}
 		}
-			// 줄 단위 전체 탐색
+		// 줄 단위 전체 탐색
 		private void totalLineScan()
 		{
 			for (int i = 0; i < 9; i++)
@@ -99,26 +90,18 @@ namespace 스토쿠_콘솔
 					if (game[i, j] != 0)
 						for (int k = 0; k < 9; k++)
 						{
-							if(hint[game[i, j] - 1, i, k])
+							if (hint[game[i, j] - 1, i, k])
 							{
 								hint[game[i, j] - 1, i, k] = false;
 								hintCount[i, k]--;
 							}
-							if(hint[game[i, j] - 1, k, j])
+							if (hint[game[i, j] - 1, k, j])
 							{
 								hint[game[i, j] - 1, k, j] = false;
 								hintCount[k, j]--;
 							}
 						}
-
-			if(hintStart)
-			{
-				Console.WriteLine("힌트 초기화 됨\n");
-				print.bigHintDefult(game, hint);
-			}
-			hintStart = false;
 		}
-
 
 		// 힌트 한개만 가지고 있는 칸 탐색
 		public Result onlyOneHintScan(long count)

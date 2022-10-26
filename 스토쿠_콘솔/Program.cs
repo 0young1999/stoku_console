@@ -47,18 +47,30 @@ namespace 스토쿠_콘솔
 			int[,] game = io.FileAnalysis(fileName);
 			if (game == null) return;
 			stoku = new Stoku(game);
+				// 힌트 표시 여부
+			bool hintStart = true;
 
 			// 공식으로 인한 탐색
 			while (true)
 			{
-				// 힌트 초기화
-				stoku.hintScan();
-
 				// 반복 횟수 추가
 				count++;
 
 				// result
 				Result result = null;
+
+				// 힌트 초기화
+				if(hintStart)
+				{
+					result = stoku.hintScan();
+					print.print(result);
+					hintStart = false;
+					continue;
+				}
+				else
+				{
+					stoku.hintScan();
+				}
 
 				// 힌트 한개만 가지는 경우
 
