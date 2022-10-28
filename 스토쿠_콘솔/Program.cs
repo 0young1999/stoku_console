@@ -131,11 +131,11 @@ namespace 스토쿠_콘솔
 			if(stoku.endCheck())
 			{
 				Console.WriteLine("정상 종료됨\n");
-				print.bigHintDefult(stoku.GetGameBase(), stoku.GetHint());
+				print.bigHintDefult(stoku.GetGame(), stoku.GetHint());
 			} else
 			{
 				Console.WriteLine("답을 다 찾지 못함!");
-				print.bigHintEndCheck(stoku.GetGameBase(), stoku.GetHint());
+				print.bigHintEndCheck(stoku.GetGame(), stoku.GetHint());
 			}
 			Console.ReadKey();
 		}

@@ -713,8 +713,111 @@ namespace 스토쿠_콘솔
 			return true;
 		}
 
+		// brute force
+		public List<Result> bruteForce()
+		{
+			List<Result> list = new List<Result>();	// 결과
+			int bFState = 0;    // 진행 상태
+			int[,] bFGame = GetGame();
+
+			for(int x = 0; x < 9; x++)	// x
+			{
+				// 뒤로 탐색
+				if(bFState < 0)
+				{
+					if (x == -1)
+					{
+						break;
+					} else if(game[x, 0] != 0)
+					{
+						x = x - 1;
+						continue;
+					} else
+					{
+						bFState = 0;
+					}
+				}
+				for (int y = 0; y < 9; y++)	// y
+				{
+					if(bFState == -1) // 뒤로 탐색
+					{
+						if(y == -1)
+						{
+							if(x == 0)
+							{
+								return list;
+							}
+							x = x - 2;
+							break;
+						} else if(game[x, y] != 0)
+						{
+							y = y - 1;
+							continue;
+						} else
+						{
+							bFState = 0;
+						}
+					}
+					if(game[x, y] == 0)
+					{
+						for(int num = bFState; num < 9; num++)
+						{
+							if(hint[num, x, y])
+							{
+								// 무결성 확인
+								bool temp1State = false;
+								// 줄단위
+								for (int temp1 = 0; temp1 < 9; temp1++)
+								{
+									if(bFGame[x, temp1] == num + 1 || bFGame[temp1, y] == num + 1)
+									{
+										temp1State = true;
+										break;
+									}
+								}
+								// 블럭 단위
+								for(int tempX = (x / 3) * 3; tempX < (x / 3 + 1) * 3; tempX++)
+								{
+									for(int tempY = (y / 3) * 3; tempY < (y / 3 + 1) * 3; tempY++)
+									{
+										if(bFGame[tempX, tempY] == num + 1)
+										{
+											temp1State = true;
+											break;
+										}
+									}
+								}
+								if(!temp1State)
+								{
+									bFGame[x, y] = num + 1;
+									break;
+								}
+							} 
+							if(num == 8)
+							{
+								bFGame[x, y] = 0;
+								bFState = -1;
+								y = y - 1;
+								break;
+							}
+						}
+					}
+					if (x == 8 && y == 8)
+					{
+						Result result = new Result(bFGame, hint, "결과");
+						list.Add(result);
+						bFState = -1;
+						y = y - 1;
+						continue;
+					}
+				}
+			}
+
+			return list;
+		} 
+
 		// get
-		public int[,] GetGameBase() { return game; }
-		public bool[,,] GetHint() { return hint; }
+		public int[,] GetGame() { return (int[,])game.Clone(); }
+		public bool[,,] GetHint() { return (bool[,,])hint.Clone(); }
 	}
 }
