@@ -719,8 +719,11 @@ namespace 스토쿠_콘솔
 			List<Result> list = new List<Result>();	// 결과
 			int bFState = 0;    // 진행 상태
 			int[,] bFGame = GetGame();
+			bool[,,] bFHint = new bool[9, 9, 9];
+			long bFCount = 0;
+			for (int i = 0; i < 9; i++) for (int j = 0; j < 9; j++) for (int k = 0; k < 9; k++) bFHint[i, j, k] = false;
 
-			for(int x = 0; x < 9; x++)	// x
+			for (int x = 0; x < 9; x++)	// x
 			{
 				// 뒤로 탐색
 				if(bFState < 0)
@@ -730,39 +733,61 @@ namespace 스토쿠_콘솔
 						break;
 					} else if(game[x, 0] != 0)
 					{
-						x = x - 1;
+						x = x - 2;
 						continue;
 					} else
 					{
 						bFState = 0;
 					}
 				}
-				for (int y = 0; y < 9; y++)	// y
+				for (int y = 0; y < 9; y++) // y
 				{
-					if(bFState == -1) // 뒤로 탐색
+					if (bFState == -1) // 뒤로 탐색
 					{
-						if(y == -1)
+						if (y == -1)
 						{
 							if(x == 0)
 							{
 								return list;
 							}
-							x = x - 2;
-							break;
+							if (game[x, 0] == 0) bFGame[x, 0] = 0;
+							x = x - 1;
+							y = 7;
+							continue;
 						} else if(game[x, y] != 0)
 						{
-							y = y - 1;
+							y = y - 2;
 							continue;
 						} else
 						{
+							bool temp1 = false;
+							do
+							{
+								if(bFGame[x, y] != 9 && hint[bFGame[x, y], x, y])
+								{
+									break;
+								}
+								bFGame[x, y]++;
+								if (bFGame[x, y] >= 9)
+								{
+									temp1 = true;
+									break;
+								}
+							} while (!hint[bFGame[x, y], x, y]);
+							if (temp1)
+							{
+								bFGame[x, y] = 0;
+								y = y - 2;
+								continue;
+							}
 							bFState = 0;
 						}
 					}
-					if(game[x, y] == 0)
+					if (game[x, y] == 0)
 					{
-						for(int num = bFState; num < 9; num++)
+						for(int num = bFGame[x, y]; num < 9; num++)
 						{
-							if(hint[num, x, y])
+							if (hint[num, x, y])
 							{
 								// 무결성 확인
 								bool temp1State = false;
@@ -772,6 +797,7 @@ namespace 스토쿠_콘솔
 									if(bFGame[x, temp1] == num + 1 || bFGame[temp1, y] == num + 1)
 									{
 										temp1State = true;
+										bFGame[x, y] = 0;
 										break;
 									}
 								}
@@ -783,6 +809,7 @@ namespace 스토쿠_콘솔
 										if(bFGame[tempX, tempY] == num + 1)
 										{
 											temp1State = true;
+											bFGame[x, y] = 0;
 											break;
 										}
 									}
@@ -797,17 +824,18 @@ namespace 스토쿠_콘솔
 							{
 								bFGame[x, y] = 0;
 								bFState = -1;
-								y = y - 1;
+								y = y - 2;
 								break;
 							}
 						}
 					}
 					if (x == 8 && y == 8)
 					{
-						Result result = new Result(bFGame, hint, "결과");
+						bFCount++;
+						Result result = new Result(bFGame, bFHint, bFCount + "번째 결과");
 						list.Add(result);
 						bFState = -1;
-						y = y - 1;
+						y = y - 2;
 						continue;
 					}
 				}

@@ -136,6 +136,17 @@ namespace 스토쿠_콘솔
 			{
 				Console.WriteLine("답을 다 찾지 못함!");
 				print.bigHintEndCheck(stoku.GetGame(), stoku.GetHint());
+				List<Result> list = stoku.bruteForce();
+				if(list.Count() == 0)
+				{
+					Console.WriteLine("답이 없음");
+				} else
+				{
+					foreach(Result item in list)
+					{
+						print.print(item);
+					}
+				}
 			}
 			Console.ReadKey();
 		}
