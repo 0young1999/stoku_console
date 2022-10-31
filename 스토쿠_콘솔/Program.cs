@@ -10,12 +10,6 @@ namespace 스토쿠_콘솔
 	{
 		static void Main(string[] args)
 		{
-			// 콘솔 설정
-				// 콘솔 사이즈
-			Console.SetWindowSize(100, 39);
-				// 콘솔 색상
-			Console.ForegroundColor = ConsoleColor.White;
-
 			// 설정 변수
 				// 파일명
 			string fileName = "Naked Triple.txt";
@@ -24,31 +18,161 @@ namespace 스토쿠_콘솔
 			//string fileName = "Intersetion(Pointing).txt";
 			//string fileName = "test1.txt";
 				// 출력 여부
-			bool printState = false;
+			bool printState = true;
 
-			// 클래스 로드
-				// 화면 출력
-			ConsoleWrite print = new ConsoleWrite();
-				// 파일
-			FileIo io = new FileIo();
-				// 스토쿠
+			// file io
+			TxtReader io = new TxtReader();
+
+
+			while(true)
+			{
+				ConsoleClear();
+
+				// 메인 페이지
+				Console.WriteLine();
+				Console.WriteLine(" 스도쿠 풀이기\n\n 현재 설정된 파일 이름 : " + fileName);
+				Console.WriteLine(" 파일 상태 : " + io.FileCheck(fileName));
+				Console.WriteLine();
+				Console.WriteLine(" 0. 계속");
+				Console.WriteLine(" 1. 파일명 변경");
+				Console.WriteLine(" 2. 파일 리스트");
+				Console.WriteLine();
+				Console.Write(" 메뉴 선택 : ");
+				string menuSelect = Console.ReadLine().Trim();
+
+				if (menuSelect.Equals("0"))	// 문제 해결
+				{
+					if(io.FileCheck(fileName))
+					{
+						Resolution(printState, fileName);
+					}
+					else
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine(" 사용불가 파일 존재 하지 않음!");
+						Console.ReadKey();
+						Console.ForegroundColor = ConsoleColor.White;
+					}
+				} 
+				else if (menuSelect.Equals("1"))	// 파일명 변경
+				{
+					fileName = FileNameChage();
+				}
+				else if (menuSelect.Equals("2"))	// 파일 리스트
+				{
+					fileName = FileList(fileName);
+				}
+				else
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(" 입력 오류 : " + menuSelect);
+					Console.ReadKey();
+					Console.ForegroundColor = ConsoleColor.White;
+				}
+			}
+		}
+
+		// 파일 리스트
+		private static string FileList(string fileName)
+		{
+			while(true)
+			{
+				ConsoleClear();
+
+				Console.WriteLine();
+				Console.WriteLine(" 파일 리스트");
+				Console.WriteLine();
+				Console.WriteLine(" 0 : 추가 수정 삭제");
+				Console.WriteLine();
+
+				Console.Write(" 번호 입력 : ");
+				string menuSelect = Console.ReadLine().Trim();
+
+				if (menuSelect.Equals(""))
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(" 입력이 비었습니다.\n");
+					Console.ReadKey();
+					Console.ForegroundColor = ConsoleColor.White;
+					continue;
+				}
+
+				break;
+			}
+
+			return fileName;
+		}
+
+		// 파일명 변경
+		private static string FileNameChage()
+		{
+			string fileName = null;
+
+			while(true)
+			{
+				fileName = "";
+
+				ConsoleClear();
+
+				Console.Write("\n 확장자는 .txt로 고정되어 붙이실 필요 없습니다.\n\n 파일명 : ");
+				fileName = Console.ReadLine().Trim();
+
+				// 오류 처리
+				if(fileName.Equals(""))
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(" 입력이 비었습니다.\n");
+					Console.ReadKey();
+					Console.ForegroundColor = ConsoleColor.White;
+					continue;
+				}
+				else if(fileName.Split('.').Length != 1)
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(" 특수문자 '.'는 허용되지 않습니다.\n");
+					Console.ReadKey();
+					Console.ForegroundColor = ConsoleColor.White;
+					continue;
+				}
+
+				// txt 붙이기
+				fileName = fileName + ".txt";
+
+				break;
+			}
+
+			return fileName;
+		}
+
+		// 문제 해결
+		private static void Resolution(bool printState, string fileName)
+		{
+			ConsoleClear();
+
+			// 파일
+			TxtReader io = new TxtReader();
+			// 스토쿠
 			Stoku stoku = null;
+			// 화면 출력
+			ConsoleWrite print = new ConsoleWrite();
+			// 반복 횟수 확인
+			long count = 0;
 
 			// 파일 불러오기
-			Console.WriteLine("파일 내용 확인\n");
+			Console.WriteLine(" 파일 내용 확인\n");
 			Console.WriteLine(io.FileFullLoad(fileName));
 			Console.ReadKey();
 			Console.WriteLine();
 
-			// 변수
-				// 반복 횟수 확인
-			long count = 0;
-				// 스토쿠
+			// 스토쿠
 			int[,] game = io.FileAnalysis(fileName);
-			if (game == null) return;
+			if (game == null)
+			{
+				Console.WriteLine(" 파일오류!\n");
+				Console.ReadKey();
+				return;
+			}
 			stoku = new Stoku(game);
-				// 힌트 표시 여부
-			bool hintStart = true;
 
 			// 공식으로 인한 탐색
 			while (true)
@@ -60,12 +184,10 @@ namespace 스토쿠_콘솔
 				Result result = null;
 
 				// 힌트 초기화
-				if(hintStart)
+				if (count == 1)
 				{
 					result = stoku.hintScan();
 					print.print(result);
-					hintStart = false;
-					continue;
 				}
 				else
 				{
@@ -75,9 +197,9 @@ namespace 스토쿠_콘솔
 				// 힌트 한개만 가지는 경우
 
 				result = stoku.onlyOneHintScan(count);
-				if(result != null)
+				if (result != null)
 				{
-					if(printState) print.print(result);
+					if (printState) print.print(result);
 					continue;
 				}
 
@@ -128,27 +250,41 @@ namespace 스토쿠_콘솔
 			}
 
 			// 종료
-			if(stoku.endCheck())
+			if (stoku.endCheck())
 			{
 				Console.WriteLine("정상 종료됨\n");
 				print.bigHintDefult(stoku.GetGame(), stoku.GetHint());
-			} else
+			}
+			else
 			{
 				Console.WriteLine("답을 다 찾지 못함!");
 				print.bigHintEndCheck(stoku.GetGame(), stoku.GetHint());
 				List<Result> list = stoku.bruteForce();
-				if(list.Count() == 0)
+				if (list.Count() == 0)
 				{
 					Console.WriteLine("답이 없음");
-				} else
+				}
+				else
 				{
-					foreach(Result item in list)
+					foreach (Result item in list)
 					{
 						print.print(item);
 					}
+					Console.WriteLine("종료!");
 				}
 			}
 			Console.ReadKey();
+		}
+
+		private static void ConsoleClear()
+		{
+			// 콘솔 설정
+				// 콘솔 사이즈
+			Console.SetWindowSize(100, 39);
+				// 콘솔 색상
+			Console.ForegroundColor = ConsoleColor.White;
+				// 콘솔 내용 초기화
+			Console.Clear();
 		}
 	}
 }

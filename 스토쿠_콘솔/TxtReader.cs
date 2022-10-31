@@ -7,12 +7,25 @@ using System.IO;
 
 namespace 스토쿠_콘솔
 {
-	class FileIo
+	class TxtReader
 	{
+		// 파일 체크
+		public bool FileCheck(string fileName)
+		{
+			return File.Exists(fileName);
+		}
+
 		// 파일 전체 불러오기
 		public string FileFullLoad(string fileName)
 		{
-			StreamReader sr = new StreamReader(fileName);
+			StreamReader sr = null;
+			try
+			{
+				sr = new StreamReader(fileName);
+			} catch (Exception e)
+			{
+				return null;
+			}
 
 			string result = "";
 			result = sr.ReadToEnd();
@@ -26,6 +39,8 @@ namespace 스토쿠_콘솔
 			int[,] result = new int[9,9];
 
 			string temp = FileFullLoad(fileName);
+
+			if (temp == null) return null;
 
 			string[] tempS = temp.Split('\n');
 
