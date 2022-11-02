@@ -21,7 +21,7 @@ namespace 스토쿠_콘솔
 			bool printState = true;
 
 			// file io
-			TxtReader io = new TxtReader();
+			TxtControll io = new TxtControll();
 
 
 			while(true)
@@ -33,7 +33,9 @@ namespace 스토쿠_콘솔
 				Console.WriteLine(" 스도쿠 풀이기\n\n 현재 설정된 파일 이름 : " + fileName);
 				Console.WriteLine(" 파일 상태 : " + io.FileCheck(fileName));
 				Console.WriteLine();
+				if(!io.FileCheck(fileName)) Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(" 0. 계속");
+				Console.ForegroundColor = ConsoleColor.White;
 				Console.WriteLine(" 1. 파일명 변경");
 				Console.WriteLine(" 2. 파일 리스트");
 				Console.WriteLine();
@@ -56,7 +58,7 @@ namespace 스토쿠_콘솔
 				} 
 				else if (menuSelect.Equals("1"))	// 파일명 변경
 				{
-					fileName = FileNameChage();
+					fileName = FileNameChage(fileName);
 				}
 				else if (menuSelect.Equals("2"))	// 파일 리스트
 				{
@@ -79,14 +81,22 @@ namespace 스토쿠_콘솔
 			{
 				ConsoleClear();
 
+				TxtControll io = new TxtControll();
+				List<string> list = io.DirectoryScan();
+				int listNum = 0;
+
 				Console.WriteLine();
 				Console.WriteLine(" 파일 리스트");
 				Console.WriteLine();
-				Console.WriteLine(" 0 : 추가 수정 삭제");
+				Console.WriteLine(" 0 : 뒤로가기");
+				foreach(string scanFileName in list)
+				{
+					Console.WriteLine(" " + ++listNum + " : " + scanFileName);
+				}
 				Console.WriteLine();
-
 				Console.Write(" 번호 입력 : ");
 				string menuSelect = Console.ReadLine().Trim();
+				int menuSelectInt = 0;
 
 				if (menuSelect.Equals(""))
 				{
@@ -96,15 +106,31 @@ namespace 스토쿠_콘솔
 					Console.ForegroundColor = ConsoleColor.White;
 					continue;
 				}
-
-				break;
+				else if (menuSelect.Equals("0"))	// 뒤로 가기
+				{
+					break;
+				}
+				else if(int.TryParse(menuSelect, out menuSelectInt))	// 파일 선택
+				{
+					if(menuSelectInt <= list.Count)
+					{
+						return list[menuSelectInt - 1];
+					}
+				}
+				else    // 입력 오류
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(" 입력 오류 : " + menuSelect);
+					Console.ReadKey();
+					Console.ForegroundColor = ConsoleColor.White;
+				}
 			}
 
 			return fileName;
 		}
 
 		// 파일명 변경
-		private static string FileNameChage()
+		private static string FileNameChage(string nowFileName)
 		{
 			string fileName = null;
 
@@ -120,11 +146,7 @@ namespace 스토쿠_콘솔
 				// 오류 처리
 				if(fileName.Equals(""))
 				{
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine(" 입력이 비었습니다.\n");
-					Console.ReadKey();
-					Console.ForegroundColor = ConsoleColor.White;
-					continue;
+					return nowFileName;
 				}
 				else if(fileName.Split('.').Length != 1)
 				{
@@ -150,7 +172,7 @@ namespace 스토쿠_콘솔
 			ConsoleClear();
 
 			// 파일
-			TxtReader io = new TxtReader();
+			TxtControll io = new TxtControll();
 			// 스토쿠
 			Stoku stoku = null;
 			// 화면 출력

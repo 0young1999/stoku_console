@@ -842,7 +842,7 @@ namespace 스토쿠_콘솔
 			}
 
 			return list;
-		} 
+		}
 
 		// get
 		public int[,] GetGame() { return (int[,])game.Clone(); }
