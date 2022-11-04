@@ -29,6 +29,13 @@ namespace 스토쿠_콘솔
 
 		// 생성자
 		private Result() { }
+		public Result(int [,] game, string content)
+		{
+			this.game = (int[,])game.Clone();
+			hint = new bool[9, 9, 9];
+			for (int i = 0; i < 9; i++) for (int j = 0; j < 9; j++) for (int k = 0; k < 9; k++) hint[i, j, k] = false;
+			this.content = content;
+		}
 		public Result(int[,] game, bool[,,] hint, string content)
 		{
 			this.game = (int[,])game.Clone();

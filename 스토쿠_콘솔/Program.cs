@@ -38,6 +38,8 @@ namespace 스토쿠_콘솔
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.WriteLine(" 1. 파일명 변경");
 				Console.WriteLine(" 2. 파일 리스트");
+				Console.WriteLine(" 3. 파일 추가");
+				Console.WriteLine(" 4. 설정");
 				Console.WriteLine();
 				Console.Write(" 메뉴 선택 : ");
 				string menuSelect = Console.ReadLine().Trim();
@@ -63,6 +65,14 @@ namespace 스토쿠_콘솔
 				else if (menuSelect.Equals("2"))	// 파일 리스트
 				{
 					fileName = FileList(fileName);
+				}
+				else if (menuSelect.Equals("3"))	// 파일 추가
+				{
+					// 추가필요
+				}
+				else if(menuSelect.Equals("4"))		// 설정
+				{
+					// 추가 필요
 				}
 				else
 				{
@@ -182,12 +192,32 @@ namespace 스토쿠_콘솔
 
 			// 파일 불러오기
 			Console.WriteLine(" 파일 내용 확인\n");
-			Console.WriteLine(io.FileFullLoad(fileName));
+			try
+			{
+				Console.WriteLine(io.FileFullLoad(fileName));
+			} catch (Exception e)
+			{
+				ConsoleClear();
+				Console.WriteLine(" 에러 발생 : " + e.Message);
+				Console.ReadKey();
+				return;
+			}
 			Console.ReadKey();
 			Console.WriteLine();
 
 			// 스토쿠
-			int[,] game = io.FileAnalysis(fileName);
+			int[,] game = null;
+			try
+			{
+				game = io.FileAnalysis(fileName);
+			}
+			catch (Exception e)
+			{
+				ConsoleClear();
+				Console.WriteLine(" 에러 발생 : " + e.Message);
+				Console.ReadKey();
+				return;
+			}
 			if (game == null)
 			{
 				Console.WriteLine(" 파일오류!\n");

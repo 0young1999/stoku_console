@@ -24,7 +24,7 @@ namespace 스토쿠_콘솔
 				sr = new StreamReader(fileName);
 			} catch (Exception e)
 			{
-				return null;
+				throw e;
 			}
 
 			string result = "";
@@ -36,39 +36,45 @@ namespace 스토쿠_콘솔
 		// 파일 분석
 		public int[,] FileAnalysis(string fileName)
 		{
-			int[,] result = new int[9,9];
-
-			string temp = FileFullLoad(fileName);
-
-			if (temp == null) return null;
-
-			string[] tempS = temp.Split('\n');
-
-			if (tempS.Length != 9) return null;
-
-			for(int i = 0; i < 9; i++)
+			try
 			{
-				if (tempS[i].Trim().Split(' ').Length != 9) return null;
-			}
+				int[,] result = new int[9, 9];
 
-			for(int i = 0; i < 9; i++)
-			{
-				string[] tempSS = tempS[i].Trim().Split(' ');
-				for(int j = 0; j < 9; j++)
+				string temp = temp = FileFullLoad(fileName);
+
+				if (temp == null) return null;
+
+				string[] tempS = temp.Split('\n');
+
+				if (tempS.Length != 9) return null;
+
+				for (int i = 0; i < 9; i++)
 				{
-					result[i, j] = int.Parse(tempSS[j]);
+					if (tempS[i].Trim().Split(' ').Length != 9) return null;
 				}
-			}
 
-			return result;
+				for (int i = 0; i < 9; i++)
+				{
+					string[] tempSS = tempS[i].Trim().Split(' ');
+					for (int j = 0; j < 9; j++)
+					{
+						result[i, j] = int.Parse(tempSS[j]);
+					}
+				}
+
+				return result;
+			} catch(Exception e)
+			{
+				throw e;
+			}
 		}
 
 		// 파일 쓰기
-		public string FileWrite(string FileName, string text, bool check)
+		public bool FileWrite(string FileName, string text, bool check)
 		{
 			if(check)
 			{
-				if (FileCheck(FileName)) return "이미 파일이 존재 합니다.";
+				if (FileCheck(FileName)) return false;
 			}
 
 			try
@@ -77,10 +83,10 @@ namespace 스토쿠_콘솔
 			} 
 			catch(Exception e)
 			{
-				return e.Message;
+				throw e;
 			}
 
-			return "성공";
+			return true;
 		}
 
 		// 파일 리스트 불러오기

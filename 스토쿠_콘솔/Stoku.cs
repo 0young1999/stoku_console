@@ -719,9 +719,7 @@ namespace 스토쿠_콘솔
 			List<Result> list = new List<Result>();	// 결과
 			int bFState = 0;    // 진행 상태
 			int[,] bFGame = GetGame();
-			bool[,,] bFHint = new bool[9, 9, 9];
 			long bFCount = 0;
-			for (int i = 0; i < 9; i++) for (int j = 0; j < 9; j++) for (int k = 0; k < 9; k++) bFHint[i, j, k] = false;
 
 			for (int x = 0; x < 9; x++)	// x
 			{
@@ -832,7 +830,7 @@ namespace 스토쿠_콘솔
 					if (x == 8 && y == 8)
 					{
 						bFCount++;
-						Result result = new Result(bFGame, bFHint, bFCount + "번째 결과");
+						Result result = new Result(bFGame, bFCount + "번째 결과");
 						list.Add(result);
 						bFState = -1;
 						y = y - 2;
