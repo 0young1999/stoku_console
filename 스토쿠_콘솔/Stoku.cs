@@ -830,7 +830,14 @@ namespace 스토쿠_콘솔
 					if (x == 8 && y == 8)
 					{
 						bFCount++;
-						Result result = new Result(bFGame, bFCount + "번째 결과");
+						Result result = null;
+						try
+						{
+							result = new Result(bFGame, bFCount + "번째 결과");
+						} catch(OutOfMemoryException e)
+						{
+							throw e;
+						}
 						list.Add(result);
 						bFState = -1;
 						y = y - 2;

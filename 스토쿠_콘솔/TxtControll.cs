@@ -70,7 +70,7 @@ namespace 스토쿠_콘솔
 		}
 
 		// 파일 쓰기
-		public bool FileWrite(string FileName, string text, bool check)
+		public bool FileWrite(string FileName, Result result, bool check)
 		{
 			if(check)
 			{
@@ -79,7 +79,7 @@ namespace 스토쿠_콘솔
 
 			try
 			{
-				File.WriteAllText(FileName, text);
+				File.WriteAllText(FileName, result.GetGameString());
 			} 
 			catch(Exception e)
 			{

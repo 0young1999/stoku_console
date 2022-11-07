@@ -32,7 +32,7 @@ namespace 스토쿠_콘솔
 			}
 		}
 		// 숫자 하나
-		public void print(Result result)
+		public void print(Result result, bool midStop = true)
 		{
 			Console.WriteLine(result.GetContent() + "\n");
 			for (int i1 = 0; i1 < 9; i1++)  // X 셀
@@ -108,8 +108,11 @@ namespace 스토쿠_콘솔
 				}
 				Console.WriteLine();
 			}
-			Console.ReadKey();
-			Console.WriteLine();
+			if(midStop)
+			{
+				Console.ReadKey();
+				Console.WriteLine();
+			}
 		}
 		// big hint
 		/*

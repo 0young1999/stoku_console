@@ -29,9 +29,29 @@ namespace 스토쿠_콘솔
 
 		// 생성자
 		private Result() { }
+		public Result(string content)
+		{
+			game = new int[9, 9];
+			hint = new bool[9, 9, 9];
+			for (int i = 0; i < 9; i++) for (int j = 0; j < 9; j++)
+				{
+					game[i, j] = 0;
+					for (int k = 0; k < 9; k++)
+					{
+						hint[i, j, k] = false;
+					}
+				}
+			this.content = content;
+		}
 		public Result(int [,] game, string content)
 		{
-			this.game = (int[,])game.Clone();
+			try
+			{
+				this.game = (int[,])game.Clone();
+			} catch(OutOfMemoryException e)
+			{
+				throw e;
+			}
 			hint = new bool[9, 9, 9];
 			for (int i = 0; i < 9; i++) for (int j = 0; j < 9; j++) for (int k = 0; k < 9; k++) hint[i, j, k] = false;
 			this.content = content;
@@ -46,7 +66,26 @@ namespace 스토쿠_콘솔
 			for (int i = 0; i < 9; i++) for (int j = 0; j < 9; j++) for (int k = 0; k < 9; k++) hintColor[i, j, k] = 0;
 		}
 
-		/**색입히기**/
+		// set
+		public void SetGameDetail(int x, int y, int value) { game[x, y] = value;	}
+
+		// get
+		public string GetGameString()
+		{
+			string result = "";
+
+			for(int x = 0; x < 9; x++)
+			{
+				for(int y = 0; y < 9; y++)
+				{
+					result += game[x, y] + " ";
+				}
+				if(x != 8) result += "\n";
+			}
+
+			return result;
+		}
+
 		// 숫자 한개만
 		public void targetOne(int num, int[] location)
 		{

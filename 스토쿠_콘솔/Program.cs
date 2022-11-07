@@ -68,7 +68,7 @@ namespace 스토쿠_콘솔
 				}
 				else if (menuSelect.Equals("3"))	// 파일 추가
 				{
-					// 추가필요
+					FileAdd();
 				}
 				else if(menuSelect.Equals("4"))		// 설정
 				{
@@ -81,6 +81,116 @@ namespace 스토쿠_콘솔
 					Console.ReadKey();
 					Console.ForegroundColor = ConsoleColor.White;
 				}
+			}
+		}
+
+		// 파일 추가
+		private static void FileAdd()
+		{
+			while (true)
+			{
+				ConsoleClear();
+
+				// 필요 클래스 생성
+				TxtControll io = new TxtControll();
+				ConsoleWrite print = new ConsoleWrite();
+
+				// 메뉴
+				Console.WriteLine();
+				Console.WriteLine(" 파일 추가");
+				Console.Write(" 추가할 파일 이름 (미입력시 나가기) : ");
+				string fileName = Console.ReadLine().Trim();
+
+				if (fileName.Equals(""))	// 뒤로가기
+				{
+					return;
+				}
+				else if (io.FileCheck(fileName + ".txt"))	// 중복 파일 존재
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(" 파일이 이미 존재 합니다.");
+					Console.ReadKey();
+					continue;
+				}
+
+				Result result = new Result("파일 생성, 파일 이름 : " + fileName);	// 임시 생성
+
+				while(true)
+				{
+					ConsoleClear();
+					print.print(result, false); // 현재 상황 출력
+					Console.WriteLine("0 0 0을 입력하면 종료 됩니다.");
+					Console.Write("좌표와 값 (세로, 가로, 기입된 숫자) : ");
+					string xyr = Console.ReadLine().Trim(); // string으로 좌표와 값 받기
+					string[] xyrS = xyr.Split(' ');	// 자르기
+					if(xyrS.Length != 3)    // 값 오류
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine(" 입력값 오류 : 입력 값 갯수 오류.");
+						Console.ReadKey();
+						continue;
+					}
+					int[] xyri = new int[3];	// 값 타입 변환
+					try
+					{
+						xyri[0] = int.Parse(xyrS[0]);
+						xyri[1] = int.Parse(xyrS[1]);
+						xyri[2] = int.Parse(xyrS[2]);
+					}
+					catch (Exception)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine(" 입력값 오류 : 문자가 입력 되어있습니다.");
+						Console.ReadKey();
+						continue;
+					}
+
+					// 종료 감지
+					if(xyri[0] == 0 && xyri[1] == 0 && xyri[2] == 0)
+					{
+						break;
+					}
+
+					// 변수 값 범위 검사
+					if(xyri[0] < 1 && xyri[0] > 9)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine(" 세로값 오류 : 1 ~ 9 사이 값을 입력 해주세요.");
+						Console.ReadKey();
+						continue;
+					}
+					else if (xyri[1] < 1 && xyri[1] > 9)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine(" 가로값 오류 : 1 ~ 9 사이 값을 입력 해주세요.");
+						Console.ReadKey();
+						continue;
+					}
+					else if (xyri[2] < 1 && xyri[2] > 9)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine(" 기입된 숫자 값 오류 : 1 ~ 9 사이 값을 입력 해주세요.");
+						Console.ReadKey();
+						continue;
+					}
+					else
+					{
+						result.SetGameDetail(xyri[0] - 1, xyri[1] - 1, xyri[2]);
+						continue;
+					}
+				}
+
+				try
+				{
+					io.FileWrite(fileName + ".txt", result, true);
+				} catch (Exception e)
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(e.Message);
+					Console.ForegroundColor = ConsoleColor.White;
+					Console.ReadKey();
+				}
+				break;
 			}
 		}
 
@@ -311,7 +421,17 @@ namespace 스토쿠_콘솔
 			{
 				Console.WriteLine("답을 다 찾지 못함!");
 				print.bigHintEndCheck(stoku.GetGame(), stoku.GetHint());
-				List<Result> list = stoku.bruteForce();
+				List<Result> list = null;
+				try
+				{
+					list = stoku.bruteForce();
+				} catch(OutOfMemoryException)
+				{
+					ConsoleClear();
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine(" 메모리 부족!");
+					return;
+				}
 				if (list.Count() == 0)
 				{
 					Console.WriteLine("답이 없음");
@@ -332,7 +452,7 @@ namespace 스토쿠_콘솔
 		{
 			// 콘솔 설정
 				// 콘솔 사이즈
-			Console.SetWindowSize(100, 39);
+			Console.SetWindowSize(100, 40);
 				// 콘솔 색상
 			Console.ForegroundColor = ConsoleColor.White;
 				// 콘솔 내용 초기화
