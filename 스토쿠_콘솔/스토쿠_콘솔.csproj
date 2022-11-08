@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="Result.cs" />
     <Compile Include="ConsoleWrite.cs" />
+    <Compile Include="XmlControll.cs" />
     <Compile Include="TxtControll.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
