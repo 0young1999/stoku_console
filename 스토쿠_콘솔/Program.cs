@@ -39,7 +39,6 @@ namespace 스토쿠_콘솔
 				Console.WriteLine(" 1. 파일명 변경");
 				Console.WriteLine(" 2. 파일 리스트");
 				Console.WriteLine(" 3. 파일 추가");
-				Console.WriteLine(" 4. 설정");
 				Console.WriteLine();
 				Console.Write(" 메뉴 선택 : ");
 				string menuSelect = Console.ReadLine().Trim();
@@ -69,10 +68,6 @@ namespace 스토쿠_콘솔
 				else if (menuSelect.Equals("3"))	// 파일 추가
 				{
 					FileAdd();
-				}
-				else if(menuSelect.Equals("4"))		// 설정
-				{
-					// 추가 필요
 				}
 				else
 				{
